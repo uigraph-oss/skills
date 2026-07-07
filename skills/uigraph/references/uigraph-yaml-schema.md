@@ -16,6 +16,9 @@ Use this file as the source of truth before generating `.uigraph.yaml`. Do not i
 - Generated map images must be under `.uigraph/maps/`.
 - SQL database schemas use `.sql`; NoSQL database schemas use `.json`.
 - All referenced files must exist relative to `.uigraph.yaml`.
+- `queryFiles` externalizes query definitions: each listed file holds a `queries:` list, merged with any inline `queries`.
+- `testPacks[].testCasesPath` externalizes a pack's cases: the file holds a `testCases:` list, merged with any inline `testCases`.
+- Externalized `queries[].path` (the SQL file) is still resolved relative to the working directory, not the queries file.
 
 ## Canonical Structure
 
@@ -60,6 +63,16 @@ databases:                      # optional
     dbType: PostgreSQL          # optional
     schemaPath: .uigraph/db/app.sql  # required
 
+queries:                        # optional; each references a database by name
+  - name: top-customers         # required: stable upsert key
+    database: app               # required: must match a databases[].name
+    path: .uigraph/queries/top-customers.sql  # exactly one of path or queryText
+    description: Top customers   # optional
+    tags: [reporting]           # optional
+
+queryFiles:                     # optional; externalize query definitions to keep this file small
+  - .uigraph/queries/reporting.yaml  # each file holds its own `queries:` list; merged with inline queries
+
 testPacks:                      # optional; UiGraph metadata only, not Vitest/Jest/Pytest files
   - name: API Smoke Pack        # required
     type: smoke                 # required: smoke, regression, manual
@@ -73,6 +86,7 @@ testPacks:                      # optional; UiGraph metadata only, not Vitest/Je
         apiGroupName: public-api
         operationId: healthCheck
         expectedStatusCode: 200
+    testCasesPath: .uigraph/tests/api-smoke.yaml  # optional; file holds a `testCases:` list, merged with inline testCases
 
 docs:                           # optional
   - name: Runbook               # required

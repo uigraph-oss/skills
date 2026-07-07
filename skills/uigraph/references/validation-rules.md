@@ -41,6 +41,9 @@ All `path` fields must point to files that exist relative to `.uigraph.yaml`:
 - `databases[*].schemaPath`
 - `docs[*].path`
 - `maps[*].frames[*].imagePath`
+- `queries[*].path` (when set instead of `queryText`)
+- `queryFiles[*]` (each must be a YAML file with a `queries:` list)
+- `testPacks[*].testCasesPath` (when set; a YAML file with a `testCases:` list)
 
 Generated artifact paths must stay under `.uigraph/`:
 
@@ -104,15 +107,15 @@ For every `components` entry under a focal point:
 
 ## Test Case Rules
 
-- `testPacks` must stay inline in `.uigraph.yaml`.
+- Test cases may be inline under `testCases`, external via `testPacks[*].testCasesPath`, or both (merged).
 - Do not create project test framework files for UiGraph test packs.
 - Do not derive UiGraph test packs from Vitest, Jest, Pytest, or PHPUnit files unless explicitly requested.
 - UiGraph test cases must use only schema fields, not framework-specific fields like `describe`, `it`, `expect`, `test`, `mock`, or `beforeEach`.
 - `testCases[*].title` is required.
 - `testCases[*].order` is required.
-- API test cases should link to API operations with matching `apiGroupName` and `operationId` when API evidence exists.
-- When `type` is `api`, `apiGroupName` and `operationId` should reference an existing API group and operation.
-- `operationId` must match an `operationId` defined in the synced OpenAPI spec.
+- API test cases should link to API operations with matching `apiGroupName` and `operationId` when API evidence exists, but linking is optional — omit both for a case not tied to a synced endpoint (e.g. a custom URL).
+- When `type` is `api` and `operationId` is set, it must reference an existing API group and operation. A set `operationId` that does not resolve to a synced endpoint fails the sync (no silent fallback to `GET`).
+- When it resolves, the test case is stored with a real link to that API spec (`apiSpecId`) plus the endpoint's HTTP method, matching UI-authored cases.
 
 ## Frame Image Rules
 

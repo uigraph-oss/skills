@@ -1,6 +1,6 @@
 # Test Packs and Test Cases
 
-Test packs are metadata records defined inline in `.uigraph.yaml` under `testPacks`.
+Test packs are metadata records defined in `.uigraph.yaml` under `testPacks`. A pack's test cases can live inline under `testCases`, in a separate file referenced by `testCasesPath`, or both (the two lists are merged). Use `testCasesPath` to keep the main `.uigraph.yaml` small when a pack has many cases.
 
 UiGraph test packs are not generated test files. They are not Vitest, Jest, Pytest, PHPUnit, or other project test framework tests.
 
@@ -31,6 +31,20 @@ testPacks:
 | `environment` | string | no | Environment label |
 | `releaseLabel` | string | no | Release tag |
 | `testCases` | list | no | List of test cases |
+| `testCasesPath` | string | no | Path to a YAML file holding a `testCases:` list; merged with inline `testCases` |
+
+### External Test Cases File
+
+```yaml
+# .uigraph/tests/adapter-smoke.yaml
+testCases:
+  - title: Login returns 200
+    type: api
+    order: 2
+    apiGroupName: public-api
+    operationId: loginUser
+    expectedStatusCode: 200
+```
 
 ## API Test Case
 
@@ -63,8 +77,8 @@ testPacks:
 | `linkedTicket` | string | no | External ticket ID |
 | `estimatedDurationMins` | int | no | Estimated minutes |
 | `testOwner` | string | no | Owner email or name |
-| `apiGroupName` | string | no | Must match an `apis[].name` |
-| `operationId` | string | no | Must match an `operationId` in the OpenAPI spec |
+| `apiGroupName` | string | no | If set, must match an `apis[].name` |
+| `operationId` | string | no | If set, must match an `operationId` in the OpenAPI spec — sync fails if it does not resolve |
 | `expectedStatusCode` | int | no | Expected HTTP status |
 | `requestTemplate` | string | no | Request body template |
 | `responseTimeMs` | int | no | Max response time in ms |
@@ -124,6 +138,12 @@ testPacks:
 
 ## Linking Rules
 
-- `apiGroupName` must match the `name` of an entry in `apis`.
-- `operationId` must match an `operationId` inside the referenced OpenAPI spec.
+- Linking an API test case to the contract is **optional**. Omit `apiGroupName`/`operationId`
+  for a test case not tied to a synced endpoint (e.g. one hitting a custom URL).
+- If `operationId` is set, it must match an `operationId` inside the referenced OpenAPI spec,
+  and `apiGroupName` (if set) must match the `name` of an entry in `apis`. When it resolves, the
+  test case is stored with a real link to that API spec (`apiSpecId`) plus the endpoint's HTTP
+  method — identical to a case linked from the UI.
+- A set `operationId` that does not resolve to a synced endpoint **fails the sync** (it no longer
+  silently falls back to `GET`). Sync the API group first, or fix the id.
 - `mapName`, `frameName`, `focalPointName` must match entries in `maps`.
