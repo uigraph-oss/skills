@@ -14,6 +14,8 @@ Use this file as the source of truth before generating `.uigraph.yaml`. Do not i
 - Generated database schemas must be under `.uigraph/db/`.
 - Generated docs must be under `.uigraph/docs/`.
 - Generated map images must be under `.uigraph/maps/`.
+- Generated saved-query files (`queryFiles` and `queries[].path` SQL files) must be under `.uigraph/queries/`.
+- Generated external test case files (`testPacks[].testCasesPath`) must be under `.uigraph/tests/`.
 - SQL database schemas use `.sql`; NoSQL database schemas use `.json`.
 - All referenced files must exist relative to `.uigraph.yaml`.
 - `queryFiles` externalizes query definitions: each listed file holds a `queries:` list, merged with any inline `queries`.
@@ -91,7 +93,7 @@ testPacks:                      # optional; UiGraph metadata only, not Vitest/Je
 docs:                           # optional
   - name: Runbook               # required
     path: .uigraph/docs/runbook.md  # required
-    fileType: markdown          # optional: pdf, html, markdown, doc, other
+    fileType: markdown          # optional: pdf, html, markdown, doc, txt, image, video, audio, other
     description: On-call runbook
 
 maps:                           # optional; see references/maps-frames-focalpoints.md

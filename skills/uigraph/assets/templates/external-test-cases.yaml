@@ -1,0 +1,58 @@
+testCases:
+  - title: List products returns 200
+    type: api
+    order: 1
+    priority: p0
+    tags:
+      - products
+      - smoke
+    apiGroupName: storefront-api
+    operationId: listProducts
+    expectedStatusCode: 200
+    responseTimeMs: 800
+
+  - title: Get product by id returns 200
+    type: api
+    order: 2
+    priority: p1
+    apiGroupName: storefront-api
+    operationId: getProduct
+    expectedStatusCode: 200
+    assertions:
+      - field: id
+        type: equals
+        value: "123"
+      - field: inStock
+        type: equals
+        value: "true"
+
+  - title: Get missing product returns 404
+    type: api
+    order: 3
+    priority: p2
+    apiGroupName: storefront-api
+    operationId: getProduct
+    expectedStatusCode: 404
+
+  - title: Verify checkout flow in UI
+    type: manual
+    order: 4
+    priority: p1
+    tags:
+      - ui
+      - manual
+    mapName: Storefront
+    frameName: Checkout
+    focalPointName: Place Order
+    stepsList:
+      - action: Add a product to cart
+        expectedResult: Cart shows 1 item
+      - action: Proceed to checkout
+        expectedResult: Checkout form is displayed
+      - action: Submit payment
+        expectedResult: Order confirmation page appears
+    expectedOutcome: Order is placed and confirmation email is sent
+    preconditions: Product is in stock
+    testData: Use test account testuser@example.com / TestPass123
+    requiresEvidence: true
+    isCritical: true

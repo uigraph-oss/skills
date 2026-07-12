@@ -57,7 +57,7 @@ The converter uses context fields to change node types, add component fields, re
 - `text` uses `value` to create the `Text` component field.
 - `code` uses `value` to create the `Code` component field.
 - `table` uses `table.columns`, `table.rows`, and `name` for rendered table content.
-- `data-source` and `db-table` both convert to the database table node type and use `dbConfig`.
+- `data-source` and `db-table` both convert to the database table node type and use `dbConfig`. `dbConfig` requires three name-based fields (not IDs): `serviceName`, `databaseName`, and `tableName`.
 - `databaseTableSQL` is the round-trip database table node type.
 - `component` converts to a `builder` node and sets `componentId`.
 - `builder` can preserve full component field metadata during round-trip.

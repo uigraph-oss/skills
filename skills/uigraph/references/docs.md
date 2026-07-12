@@ -22,18 +22,33 @@ docs:
 |-------|------|----------|-------------|
 | `name` | string | yes | Display name. Used for upsert matching |
 | `path` | string | yes | Relative path to file |
-| `fileType` | string | no | `pdf`, `html`, `markdown`, `doc`, `other`. Auto-detected from extension if omitted |
+| `fileType` | string | no | `pdf`, `html`, `markdown`, `doc`, `txt`, `image`, `video`, `audio`, `other` |
 | `description` | string | no | Description |
 
-## Supported File Types
+## Content Type by Extension
 
-| Extension | Auto-detected Type |
+When `fileType` is omitted, the CLI resolves the S3 content type from the file extension:
+
+| Extension | Content-Type |
 |-----------|-------------------|
-| `.pdf` | `pdf` |
-| `.html`, `.htm` | `html` |
-| `.md`, `.markdown` | `markdown` |
-| `.doc`, `.docx` | `doc` |
-| `.txt` | `other` (falls through) |
+| `.pdf` | `application/pdf` |
+| `.html`, `.htm` | `text/html` |
+| `.md`, `.markdown` | `text/markdown` |
+| `.doc`, `.docx` | `application/msword` |
+| `.txt` | `text/plain` |
+| `.png` | `image/png` |
+| `.jpg`, `.jpeg` | `image/jpeg` |
+| `.gif` | `image/gif` |
+| `.webp` | `image/webp` |
+| `.svg` | `image/svg+xml` |
+| `.mp4` | `video/mp4` |
+| `.mov` | `video/quicktime` |
+| `.webm` | `video/webm` |
+| `.mp3` | `audio/mpeg` |
+| `.wav` | `audio/wav` |
+| `.ogg` | `audio/ogg` |
+| `.m4a` | `audio/mp4` |
+| anything else | `application/octet-stream` |
 
 ## Upload Behavior
 
@@ -47,20 +62,19 @@ docs:
 
 ## Content Type Mapping for S3 Upload
 
-The CLI resolves content type based on `fileType` or file extension:
+The CLI resolves content type from `fileType` first, then falls back to the file extension:
 
-| Type/Extension | Content-Type |
+| `fileType` | Content-Type |
 |---------------|--------------|
 | `pdf` | `application/pdf` |
 | `html` | `text/html` |
 | `markdown` | `text/markdown` |
 | `doc` | `application/msword` |
 | `txt` | `text/plain` |
-| `png` | `image/png` |
-| `jpg`, `jpeg` | `image/jpeg` |
-| `gif` | `image/gif` |
-| `webp` | `image/webp` |
-| `svg` | `image/svg+xml` |
-| default | `application/octet-stream` |
+| `image` | resolved from extension (default `image/png`) |
+| `video` | resolved from extension (default `video/mp4`) |
+| `audio` | resolved from extension (default `audio/mpeg`) |
+
+When `fileType` is empty, the extension is used (see "Content Type by Extension" above), defaulting to `application/octet-stream`.
 
 The content type sent to S3 must match what the gateway used when generating the presigned URL, or S3 returns `403 SignatureDoesNotMatch`.
