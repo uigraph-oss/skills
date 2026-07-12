@@ -49,10 +49,20 @@ databases:
     dbType: MySQL
     schemaPath: .uigraph/db/reporting-schema.sql
 
+queries:
+  - name: orphaned-orders
+    database: ecommerce
+    queryText: "SELECT * FROM orders WHERE customer_id IS NULL"
+    tags: [data-quality]
+
+queryFiles:
+  - .uigraph/queries/reporting.yaml
+
 testPacks:
   - name: Storefront Smoke
     type: smoke
     environment: staging
+    testCasesPath: .uigraph/tests/storefront-smoke.yaml
     testCases:
       - title: List products returns 200
         type: api

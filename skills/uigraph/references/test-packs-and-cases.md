@@ -35,6 +35,8 @@ testPacks:
 
 ### External Test Cases File
 
+The referenced file holds a top-level `testCases:` list only (no `testPacks` wrapper). Its cases are merged with any inline `testCases` on the pack. See `assets/templates/external-test-cases.yaml` for a full template.
+
 ```yaml
 # .uigraph/tests/adapter-smoke.yaml
 testCases:

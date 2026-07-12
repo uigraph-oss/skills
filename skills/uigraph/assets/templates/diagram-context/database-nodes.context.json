@@ -6,8 +6,8 @@
       "type": "data-source",
       "name": "Orders",
       "dbConfig": {
-        "service": "UIGraph Adapter",
-        "database": "ecommerce",
+        "serviceName": "UIGraph Adapter",
+        "databaseName": "ecommerce",
         "tableName": "orders"
       }
     },
@@ -15,8 +15,8 @@
       "type": "db-table",
       "name": "Products",
       "dbConfig": {
-        "service": "UIGraph Adapter",
-        "database": "ecommerce",
+        "serviceName": "UIGraph Adapter",
+        "databaseName": "ecommerce",
         "tableName": "products"
       },
       "data": {
@@ -28,8 +28,8 @@
       "type": "databaseTableSQL",
       "name": "Payments",
       "dbConfig": {
-        "service": "Billing Service",
-        "database": "billing",
+        "serviceName": "Billing Service",
+        "databaseName": "billing",
         "tableName": "payments"
       }
     }

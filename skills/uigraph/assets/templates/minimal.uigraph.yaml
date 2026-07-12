@@ -10,3 +10,5 @@ service:
   repository:
     provider: github
     url: https://github.com/org/repo
+  ownership:
+    team: platform

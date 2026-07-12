@@ -21,8 +21,8 @@
       "name": "Cart",
       "type": "data-source",
       "dbConfig": {
-        "service": "E-commerce Backend",
-        "database": "ecommerce",
+        "serviceName": "E-commerce Backend",
+        "databaseName": "ecommerce",
         "tableName": "cart_items"
       },
       "data": {

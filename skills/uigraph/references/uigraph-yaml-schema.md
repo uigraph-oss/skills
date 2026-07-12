@@ -8,12 +8,15 @@ Use this file as the source of truth before generating `.uigraph.yaml`. Do not i
 - `project.name` is required.
 - `service.name`, `service.category`, and `service.description` are required.
 - `service.repository.provider` and `service.repository.url` are required.
+- `service.ownership.team` is required whenever a `service` block is present.
 - `service.repository.provider` must be `github`, `gitlab`, or `bitbucket`.
 - Generated API specs must be under `.uigraph/openapi/`.
 - Generated architecture diagrams and context files must be under `.uigraph/diagrams/`.
 - Generated database schemas must be under `.uigraph/db/`.
 - Generated docs must be under `.uigraph/docs/`.
 - Generated map images must be under `.uigraph/maps/`.
+- Generated saved-query files (`queryFiles` and `queries[].path` SQL files) must be under `.uigraph/queries/`.
+- Generated external test case files (`testPacks[].testCasesPath`) must be under `.uigraph/tests/`.
 - SQL database schemas use `.sql`; NoSQL database schemas use `.json`.
 - All referenced files must exist relative to `.uigraph.yaml`.
 - `queryFiles` externalizes query definitions: each listed file holds a `queries:` list, merged with any inline `queries`.
@@ -36,9 +39,9 @@ service:
   repository:
     provider: github            # required: github, gitlab, bitbucket
     url: https://github.com/org/repo  # required: current git remote or user-provided URL
-  ownership:                    # optional
-    team: platform
-    email: platform@example.com
+  ownership:                    # required when a service is present
+    team: platform              # required
+    email: platform@example.com # optional
   labels:                       # optional
     - backend
   integrations:                 # optional
@@ -91,7 +94,7 @@ testPacks:                      # optional; UiGraph metadata only, not Vitest/Je
 docs:                           # optional
   - name: Runbook               # required
     path: .uigraph/docs/runbook.md  # required
-    fileType: markdown          # optional: pdf, html, markdown, doc, other
+    fileType: markdown          # optional: pdf, html, markdown, doc, txt, image, video, audio, other
     description: On-call runbook
 
 maps:                           # optional; see references/maps-frames-focalpoints.md

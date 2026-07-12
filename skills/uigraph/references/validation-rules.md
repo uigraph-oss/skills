@@ -15,6 +15,7 @@ After generating artifacts, validate the generated structure before finishing. D
 - `service.description` must not be empty
 - `service.repository.provider` must not be empty
 - `service.repository.url` must not be empty
+- `service.ownership.team` must not be empty when a `service` block is present
 
 ## Enums
 
@@ -27,7 +28,7 @@ After generating artifacts, validate the generated structure before finishing. D
 | `testCases[*].type` | `api`, `manual` |
 | `testCases[*].priority` | `p0`, `p1`, `p2`, `p3` |
 | `databases[*].dialect` | `postgres`, `mysql`, `sqlite`, `dynamodb`, `mongodb`, `other` |
-| `docs[*].fileType` | `pdf`, `html`, `markdown`, `doc`, `other` |
+| `docs[*].fileType` | `pdf`, `html`, `markdown`, `doc`, `txt`, `image`, `video`, `audio`, `other` |
 | `maps[*].frames[*].focalPoints[*].visibility` | `public`, `private` |
 | `maps[*].frames[*].focalPoints[*].components[*].componentId` | `component_api-contract`, `component_test-case-suite`, `component_support-kb-troubleshooting`, `component_backend-flow-diagram` |
 
@@ -101,7 +102,7 @@ Generated artifact paths must stay under `.uigraph/`:
 For every `components` entry under a focal point:
 
 1. `componentId` is required and must be one of the four valid enums.
-2. Either `componentLinkId` or `serviceName` is required.
+2. At least one of `componentLinkId`, `serviceName`, or `modalFields` is required.
 3. If `componentId` is `component_backend-flow-diagram` and `componentLinkId` is empty: `serviceName` and `architectureDiagramName` are both required.
 4. If `componentId` is `component_api-contract` and `componentLinkId` is empty: `serviceName`, `apiGroupName`, and `operationId` are all required.
 
@@ -126,4 +127,4 @@ For every `components` entry under a focal point:
 
 - The CLI computes SHA256 of the doc file.
 - If the hash matches the gateway's stored hash, the upload is skipped.
-- Supported content types for upload: `application/pdf`, `text/html`, `text/markdown`, `application/msword`, `text/plain`, `image/png`, `image/jpeg`, `image/gif`, `image/webp`, `image/svg+xml`.
+- Supported content types for upload: `application/pdf`, `text/html`, `text/markdown`, `application/msword`, `text/plain`, `image/png`, `image/jpeg`, `image/gif`, `image/webp`, `image/svg+xml`, `video/mp4`, `video/quicktime`, `video/webm`, `audio/mpeg`, `audio/wav`, `audio/ogg`, `audio/mp4`.

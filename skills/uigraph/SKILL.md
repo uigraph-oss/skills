@@ -126,3 +126,14 @@ After generating artifacts, the LLM/agent must verify the generated structure be
 ## Templates
 
 All copy-pasteable templates live in `assets/templates/`.
+
+| Template | Purpose |
+| -------- | ------- |
+| `minimal.uigraph.yaml` | Smallest valid `.uigraph.yaml` |
+| `full-example.uigraph.yaml` | All sections populated |
+| `external-test-cases.yaml` | External `testCases:` file for `testPacks[].testCasesPath` |
+| `mysql-schema-example.sql` | SQL database schema |
+| `dynamodb-schema-example.json` | NoSQL (DynamoDB/MongoDB) schema |
+| `context-example.json` | Architecture diagram context.json |
+| `diagram-context/*.context.json` | Node-specific context.json examples |
+| `github-actions.yml`, `gitlab-ci.yml`, `bitbucket-pipelines.yml` | CI/CD pipelines |
