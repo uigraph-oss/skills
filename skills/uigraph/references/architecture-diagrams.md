@@ -53,14 +53,16 @@ The converter uses context fields to change node types, add component fields, re
 
 ## Node Behavior
 
+`type` is optional; a node without one stays a default node. Pick a node or custom type (`shape`, `cloud`, etc.) when it makes sense for the node.
+
 - `cloud` sets the node type to `cloud`, forces `150x150`, and resolves an icon from `cloud` plus exact `service` name when possible.
 - `text` uses `value` to create the `Text` component field.
 - `code` uses `value` to create the `Code` component field.
 - `table` uses `table.columns`, `table.rows`, and `name` for rendered table content.
 - `data-source` and `db-table` both convert to the database table node type and use `dbConfig`. `dbConfig` requires three name-based fields (not IDs): `serviceName`, `databaseName`, and `tableName`.
 - `databaseTableSQL` is the round-trip database table node type.
-- `component` converts to a `builder` node and sets `componentId`.
-- `builder` can preserve full component field metadata during round-trip.
+- `component` converts to a `builder` node and sets `componentId`; use it when it makes sense or the user asks for it.
+- `builder` can preserve full component field metadata during round-trip; use it when the user asks for it.
 - `shape` sets `data.shape`; `or` and `summing-junction` are forced square with a minimum size of `200`.
 - `image` uses `src` as the image source.
 - `gif` uses `animatedIcon` for known animated assets or `src` for direct GIF URLs.
