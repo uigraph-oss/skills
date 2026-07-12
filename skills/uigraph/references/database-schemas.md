@@ -126,4 +126,49 @@ When `type` is `object`, the `fields` array defines nested properties recursivel
 
 ## MongoDB Schemas
 
-MongoDB uses the same JSON format as DynamoDB. The gateway adapts based on `dialect`.
+MongoDB uses a different JSON format from DynamoDB. It is organized as a list of `collections`, each with its own `fields` and `indexes` — not `primaryKey`/`globalSecondaryIndexes`/`attributes`.
+
+```json
+{
+  "name": "string",
+  "description": "string",
+  "dialect": "mongodb",
+  "collections": [
+    {
+      "id": "uuid",
+      "name": "string",
+      "tags": "string",
+      "description": "string",
+      "fields": [
+        {
+          "id": "uuid",
+          "name": "string",
+          "type": "string",
+          "required": true,
+          "fields": [],
+          "itemType": "string",
+          "itemFields": [],
+          "refCollectionId": null
+        }
+      ],
+      "indexes": [
+        {
+          "id": "uuid",
+          "name": "string",
+          "fields": [
+            { "id": "uuid", "fieldName": "string", "order": 1 }
+          ],
+          "unique": false
+        }
+      ]
+    }
+  ]
+}
+```
+
+Notes:
+
+- Each collection's `tags` and `description` are required strings (use `""` when unknown).
+- `fields[*]` uses the nested-field shape: `type` `object` uses a nested `fields` array; `type` `array` uses `itemType` and, for arrays of objects, `itemFields`.
+- `refCollectionId` links a field to another collection's `id`, or is `null`.
+- `indexes[*].fields[*].order` is `1` (ascending) or `-1` (descending); `indexes[*].unique` is a boolean.

@@ -8,6 +8,7 @@ Use this file as the source of truth before generating `.uigraph.yaml`. Do not i
 - `project.name` is required.
 - `service.name`, `service.category`, and `service.description` are required.
 - `service.repository.provider` and `service.repository.url` are required.
+- `service.ownership.team` is required whenever a `service` block is present.
 - `service.repository.provider` must be `github`, `gitlab`, or `bitbucket`.
 - Generated API specs must be under `.uigraph/openapi/`.
 - Generated architecture diagrams and context files must be under `.uigraph/diagrams/`.
@@ -38,9 +39,9 @@ service:
   repository:
     provider: github            # required: github, gitlab, bitbucket
     url: https://github.com/org/repo  # required: current git remote or user-provided URL
-  ownership:                    # optional
-    team: platform
-    email: platform@example.com
+  ownership:                    # required when a service is present
+    team: platform              # required
+    email: platform@example.com # optional
   labels:                       # optional
     - backend
   integrations:                 # optional

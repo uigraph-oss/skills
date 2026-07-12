@@ -15,6 +15,7 @@ After generating artifacts, validate the generated structure before finishing. D
 - `service.description` must not be empty
 - `service.repository.provider` must not be empty
 - `service.repository.url` must not be empty
+- `service.ownership.team` must not be empty when a `service` block is present
 
 ## Enums
 
@@ -101,7 +102,7 @@ Generated artifact paths must stay under `.uigraph/`:
 For every `components` entry under a focal point:
 
 1. `componentId` is required and must be one of the four valid enums.
-2. Either `componentLinkId` or `serviceName` is required.
+2. At least one of `componentLinkId`, `serviceName`, or `modalFields` is required.
 3. If `componentId` is `component_backend-flow-diagram` and `componentLinkId` is empty: `serviceName` and `architectureDiagramName` are both required.
 4. If `componentId` is `component_api-contract` and `componentLinkId` is empty: `serviceName`, `apiGroupName`, and `operationId` are all required.
 
