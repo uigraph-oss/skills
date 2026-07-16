@@ -32,6 +32,13 @@ apis:
     type: openapi
     path: .uigraph/openapi/admin.yaml
 
+dependencies:
+  - name: payments-events
+    service: Payments Service
+    type: event
+    criticality: soft
+    description: Receives completed payment events
+
 architectureDiagrams:
   - name: Checkout Flow
     path: .uigraph/diagrams/checkout-flow/checkout-flow.mmd

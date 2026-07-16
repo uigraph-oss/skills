@@ -10,6 +10,11 @@ Use this file as the source of truth before generating `.uigraph.yaml`. Do not i
 - `service.repository.provider` and `service.repository.url` are required.
 - `service.ownership.team` is required whenever a `service` block is present.
 - `service.repository.provider` must be `github`, `gitlab`, or `bitbucket`.
+- `dependencies[].name`, `dependencies[].service`, `dependencies[].type`, and `dependencies[].criticality` are required.
+- Dependency names must be unique within a service.
+- Dependency `type` must be `http`, `grpc`, `event`, `queue`, or `database`.
+- Dependency `criticality` must be `hard` or `soft`.
+- `http` and `grpc` dependencies require `api`; their optional `operations` must name operations in the provider API.
 - Generated API specs must be under `.uigraph/openapi/`.
 - Generated architecture diagrams and context files must be under `.uigraph/diagrams/`.
 - Generated database schemas must be under `.uigraph/db/`.
@@ -49,6 +54,17 @@ service:
       url: https://example.slack.com/archives/C123456
     jira:
       url: https://example.atlassian.net/projects/ABC
+
+dependencies:                  # optional; direct upstream services only
+  - name: inventory-api         # required: stable synchronization key
+    service: inventory-service  # required: provider service name
+    type: http                  # required: http, grpc, event, queue, database
+    criticality: hard           # required: hard, soft
+    description: Reserve stock before checkout
+    api: inventory-api          # required for http and grpc
+    operations:                 # optional; provider API operation IDs
+      - getSkuAvailability
+      - reserveInventory
 
 apis:                           # optional
   - name: public-api            # required
@@ -116,6 +132,10 @@ maps:                           # optional; see references/maps-frames-focalpoin
 ```
 
 ## Component Link Rules
+
+## Dependency Rules
+
+Dependencies declare only direct upstream relationships. A provider that has not been onboarded is retained as an unresolved dependency and does not fail synchronization. When the provider is already onboarded, HTTP and gRPC declarations are validated against its current API specification and declared operation IDs during the consumer sync. Removing a dependency from `.uigraph.yaml` removes the stored relationship on the next sync.
 
 When `componentLinkId` is absent, component links must include these fields:
 
