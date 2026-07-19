@@ -13,6 +13,7 @@ Do not generate these artifacts automatically. Use this guide to suggest artifac
 5. Propose test cases for critical paths.
 6. Propose maps, frames, and focal points for UI areas or logical groups.
 7. Propose links from focal points to relevant APIs, test packs, diagrams, and docs.
+8. Propose service dependencies when the service calls other services or datastores, marking each `hard` or `soft` by criticality. See `references/service-dependencies.md`.
 
 ## Domain: Authentication
 

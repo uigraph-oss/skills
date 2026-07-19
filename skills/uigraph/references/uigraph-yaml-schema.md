@@ -10,6 +10,12 @@ Use this file as the source of truth before generating `.uigraph.yaml`. Do not i
 - `service.repository.provider` and `service.repository.url` are required.
 - `service.ownership.team` is required whenever a `service` block is present.
 - `service.repository.provider` must be `github`, `gitlab`, or `bitbucket`.
+- A `service` block is required to sync `dependencies`; configs without a service may only sync maps and frames.
+- `dependencies[*].name` is required, must be unique, and is the stable upsert key for the dependency edge.
+- `dependencies[*].service` is required and names the target service depended upon; it must not equal `service.name`.
+- `dependencies[*].criticality` is required and must be `hard` or `soft`.
+- `dependencies[*].type`, when set, must be `http`, `graphql`, `grpc`, or `database`.
+- `dependencies[*].apiEndpointNames[*]` must each be non-empty and unique within the dependency.
 - Generated API specs must be under `.uigraph/openapi/`.
 - Generated architecture diagrams and context files must be under `.uigraph/diagrams/`.
 - Generated database schemas must be under `.uigraph/db/`.
@@ -54,6 +60,21 @@ apis:                           # optional
   - name: public-api            # required
     type: openapi               # required: openapi, graphql, grpc
     path: .uigraph/openapi/public-api.yaml  # required
+
+dependencies:                   # optional; other services or datastores this service depends on
+  - name: gateway-sync-api      # required: unique upsert key for the dependency edge
+    service: UIGraph Gateway    # required: target service name; must not equal service.name
+    criticality: hard           # required: hard, soft
+    type: http                  # optional: http, graphql, grpc, database
+    description: Sends synced catalog metadata to the gateway.  # optional
+    apiGroupName: gateway-sync-api  # optional: API group on the target service
+    apiEndpointNames:           # optional; each must be non-empty and unique
+      - SyncCatalog
+  - name: orders-store          # example database dependency
+    service: Orders DB          # required
+    criticality: soft           # required
+    type: database              # optional
+    databaseName: orders        # optional: datastore name for database-type dependencies
 
 architectureDiagrams:           # optional
   - name: Request Flow          # required
@@ -156,6 +177,7 @@ This is invalid because:
 
 ## Detailed References
 
+- Service dependencies: `references/service-dependencies.md`
 - Test packs and test cases: `references/test-packs-and-cases.md`
 - Maps, frames, and focal points: `references/maps-frames-focalpoints.md`
 - Database schemas: `references/database-schemas.md`
