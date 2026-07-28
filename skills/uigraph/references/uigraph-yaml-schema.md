@@ -56,6 +56,17 @@ service:
     jira:
       url: https://example.atlassian.net/projects/ABC
 
+dependencies:                  # optional; direct upstream services only
+  - name: inventory-api         # required: stable synchronization key
+    service: inventory-service  # required: provider service name
+    type: http                  # required: http, grpc, event, queue, database
+    criticality: hard           # required: hard, soft
+    description: Reserve stock before checkout
+    api: inventory-api          # required for http and grpc
+    operations:                 # optional; provider API operation IDs
+      - getSkuAvailability
+      - reserveInventory
+
 apis:                           # optional
   - name: public-api            # required
     type: openapi               # required: openapi, graphql, grpc
@@ -137,6 +148,10 @@ maps:                           # optional; see references/maps-frames-focalpoin
 ```
 
 ## Component Link Rules
+
+## Dependency Rules
+
+Dependencies declare only direct upstream relationships. A provider that has not been onboarded is retained as an unresolved dependency and does not fail synchronization. When the provider is already onboarded, HTTP and gRPC declarations are validated against its current API specification and declared operation IDs during the consumer sync. Removing a dependency from `.uigraph.yaml` removes the stored relationship on the next sync.
 
 When `componentLinkId` is absent, component links must include these fields:
 
