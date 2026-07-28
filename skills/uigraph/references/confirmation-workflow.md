@@ -18,6 +18,7 @@ Ask the user what to generate before writing files. Use the discovered project e
 Suggested categories:
 
 - API artifacts: OpenAPI, GraphQL, or gRPC specs.
+- Service dependencies: other services or datastores this service depends on.
 - Database artifacts: SQL schemas, NoSQL JSON schemas, or migration-derived schemas.
 - Architecture diagrams: Mermaid diagrams with optional `context.json`.
 - Documentation artifacts: README, markdown, HTML, PDF, or support docs.

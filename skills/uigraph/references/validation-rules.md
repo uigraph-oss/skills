@@ -23,6 +23,8 @@ After generating artifacts, validate the generated structure before finishing. D
 |-------|-------------|
 | `service.repository.provider` | `github`, `gitlab`, `bitbucket` |
 | `apis[*].type` | `openapi`, `graphql`, `grpc` |
+| `dependencies[*].type` | `http`, `graphql`, `grpc`, `database` (optional) |
+| `dependencies[*].criticality` | `hard`, `soft` (required) |
 | `architectureDiagrams[*]` | `name` and `path` required |
 | `testPacks[*].type` | `smoke`, `regression`, `manual` |
 | `testCases[*].type` | `api`, `manual` |
@@ -105,6 +107,17 @@ For every `components` entry under a focal point:
 2. At least one of `componentLinkId`, `serviceName`, or `modalFields` is required.
 3. If `componentId` is `component_backend-flow-diagram` and `componentLinkId` is empty: `serviceName` and `architectureDiagramName` are both required.
 4. If `componentId` is `component_api-contract` and `componentLinkId` is empty: `serviceName`, `apiGroupName`, and `operationId` are all required.
+
+## Service Dependency Rules
+
+- `dependencies` requires a `service` block; a config without a service may only sync maps and frames.
+- `dependencies[*].name` is required and must be unique across all dependencies.
+- `dependencies[*].service` is required and names the target service depended upon.
+- `dependencies[*].service` must not equal `service.name` (no self-dependency).
+- `dependencies[*].criticality` is required and must be `hard` or `soft`.
+- `dependencies[*].type`, when present, must be `http`, `graphql`, `grpc`, or `database`; it may be omitted.
+- `dependencies[*].apiEndpointNames[*]` must each be non-empty and unique within that dependency.
+- `apiGroupName`, `apiEndpointNames`, and `databaseName` describe the target service's artifacts, not the current service's; they are free-form references and are not existence-checked against local files.
 
 ## Test Case Rules
 
