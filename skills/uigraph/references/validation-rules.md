@@ -92,6 +92,7 @@ Generated artifact paths must stay under `.uigraph/`:
 - Generated diagram context should be checked against the matching skill-owned example file in `assets/templates/diagram-context/`.
 - Generated `groups` should be absent unless the source evidence or user request explicitly identifies a boundary/grouping reason.
 - Mermaid node IDs must match keys in `context.nodes` when node context is used.
+- `groups[*]` must be an object with optional `name` and `nodes`, never a bare array of node IDs.
 - `groups[*].nodes` entries must reference existing `context.nodes` keys.
 - `edges` keys must follow `<source>-<target>` for Mermaid edges when edge context is used.
 - Context must avoid fields not supported by the converter schema, especially group `style` and node style `backgroundColor`.
