@@ -7,7 +7,7 @@ This skill must plan first and generate only after explicit approval.
 1. Discover project evidence from the repository and user request.
 2. Ask the user which artifact categories to generate.
 3. Propose a final generation plan.
-4. Wait for the exact phrase `Generate Artifacts Now`.
+4. Wait for a message containing the word `Generate`.
 5. Generate only the approved artifacts.
 6. Validate and reset the generated structure through LLM/agent file inspection so the files are internally consistent.
 
@@ -37,17 +37,17 @@ Before generation, propose a final plan that includes:
 - Helper scripts to create under `.uigraph/scripts/`, only if they directly generate approved artifacts. Include the script language.
 - LLM validation checks to perform after generation.
 
-Do not generate files in the same response as the final plan unless the user has already said `Generate Artifacts Now`.
+Do not generate files in the same response as the final plan unless the user has already said `Generate`.
 
-## Approval Phrase
+## Approval Word
 
-Only this exact phrase authorizes artifact generation:
+Only this word authorizes artifact generation:
 
 ```text
-Generate Artifacts Now
+Generate
 ```
 
-If the user says anything else, ask them to confirm with the exact phrase.
+The approval message must contain this word. "generate", "generate now", and "ok generate the artifacts" all count. Messages without it, such as "go ahead", "sounds good", or "yes", do not. If the word is missing, ask the user to confirm with `Generate`.
 
 ## Helper Script Rules
 
