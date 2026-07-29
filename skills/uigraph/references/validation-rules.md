@@ -91,7 +91,9 @@ Generated artifact paths must stay under `.uigraph/`:
 - Architecture diagram `context.json` files must follow the behavior documented in `references/architecture-diagrams.md`.
 - Generated diagram context should be checked against the matching skill-owned example file in `assets/templates/diagram-context/`.
 - Generated `groups` should be absent unless the source evidence or user request explicitly identifies a boundary/grouping reason.
-- Mermaid node IDs must match keys in `context.nodes` when node context is used.
+- Mermaid node IDs must match keys in `context.nodes` when node context is used, for flowchart-style diagrams.
+- Sequence diagram context must key `context.nodes` on generated IDs (`participant-<id>`, `message-<row>`, `note-<row>`), never on the bare participant name.
+- Sequence diagram context must not set `type` or `___internal` on `participant-*` nodes, and must not declare `groups`.
 - `groups[*]` must be an object with optional `name` and `nodes`, never a bare array of node IDs.
 - `groups[*].nodes` entries must reference existing `context.nodes` keys.
 - `edges` keys must follow `<source>-<target>` for Mermaid edges when edge context is used.

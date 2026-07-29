@@ -104,6 +104,7 @@ After generating artifacts, the LLM/agent must verify the generated structure be
 - The exact `.uigraph.yaml` schema and validation rules
 - How to link artifacts together (test cases → APIs, maps → test cases, etc.)
 - The `context.json` format and structured examples for architecture diagrams
+- How `sequenceDiagram` files differ from flowcharts, including their generated node IDs
 - Node-specific diagram context examples in `assets/templates/diagram-context/`
 - The DynamoDB/MongoDB JSON schema format
 - Map/Frame/FocalPoint/Component structure
@@ -118,6 +119,7 @@ After generating artifacts, the LLM/agent must verify the generated structure be
 | `references/validation-rules.md`        | All hard constraints, enums, and file-existence checks      |
 | `references/service-dependencies.md`    | Service `dependencies` schema, criticality, and type rules  |
 | `references/architecture-diagrams.md`   | Mermaid + context.json specs and node-specific example file map |
+| `references/sequence-diagrams.md`       | `sequenceDiagram` syntax surface and its generated-ID context scheme |
 | `references/database-schemas.md`        | SQL config and NoSQL JSON format                            |
 | `references/test-packs-and-cases.md`    | Test pack and test case structure                           |
 | `references/maps-frames-focalpoints.md` | Map, Frame, FocalPoint, and Component linking               |
@@ -138,5 +140,7 @@ All copy-pasteable templates live in `assets/templates/`.
 | `mysql-schema-example.sql` | SQL database schema |
 | `dynamodb-schema-example.json` | NoSQL (DynamoDB/MongoDB) schema |
 | `context-example.json` | Architecture diagram context.json |
+| `sequence-diagram-example.mmd` | Sequence diagram `.mmd` covering participants, boxes, blocks, activations, notes |
+| `sequence-context-example.json` | Sequence diagram context.json keyed by generated node IDs |
 | `diagram-context/*.context.json` | Node-specific context.json examples |
 | `github-actions.yml`, `gitlab-ci.yml`, `bitbucket-pipelines.yml` | CI/CD pipelines |
