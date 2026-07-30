@@ -2,7 +2,7 @@ uigraph-sync:
   stage: deploy
   image: golang:1.23
   script:
-    - go install github.com/uigraph-app/uigraph-cli@latest
+    - go install github.com/uigraph-oss/uigraph-cli@latest
     - export PATH="$PATH:$(go env GOPATH)/bin"
     - uigraph sync
   only:
@@ -17,7 +17,7 @@ uigraph-sync-dry-run:
   stage: test
   image: golang:1.23
   script:
-    - go install github.com/uigraph-app/uigraph-cli@latest
+    - go install github.com/uigraph-oss/uigraph-cli@latest
     - export PATH="$PATH:$(go env GOPATH)/bin"
     - uigraph sync --dry-run
   only:

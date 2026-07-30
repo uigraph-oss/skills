@@ -5,7 +5,7 @@ pipelines:
     - step:
         name: UiGraph Sync
         script:
-          - go install github.com/uigraph-app/uigraph-cli@latest
+          - go install github.com/uigraph-oss/uigraph-cli@latest
           - export PATH="$PATH:$(go env GOPATH)/bin"
           - uigraph sync
         variables:
