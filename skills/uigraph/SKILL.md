@@ -16,14 +16,13 @@ Follow this workflow in order. Do not skip steps.
 1. **Discover project evidence** from the user's request and repository files. Look for existing API specs, route definitions, migrations, database schemas, docs, diagrams, tests, deployment config, service metadata, and outbound calls to other services or datastores.
 2. **Ask what to generate** before writing anything. Ask the user which artifact categories they want: APIs, service dependencies, database schemas, architecture diagrams, docs, test packs, maps, and optional helper scripts.
 3. **Propose a final plan** after the user selects artifact categories. The plan must list files to create or update, detected project sources, assumptions, validation steps, and any scripts that will be written under `.uigraph/scripts/`.
-4. **Wait for the exact trigger phrase**. Do not create or modify `.uigraph.yaml`, `.uigraph/**`, or `.uigraph/scripts/**` until the user says `Generate Artifacts Now`.
-5. **Generate the approved artifacts** only after that exact phrase is received. Generate only the files included in the final approved plan.
+4. **Wait for the trigger word**. Do not create or modify `.uigraph.yaml`, `.uigraph/**`, or `.uigraph/scripts/**` until the user replies with a message containing the word `Generate`.
+5. **Generate the approved artifacts** only after that word is received. Generate only the files included in the final approved plan.
 6. **Validate and reset generated structure** after generation. The LLM/agent must inspect the generated files directly and reason through validity. Check that created files are syntactically valid where possible, every `.uigraph.yaml` path points to an existing file, links are internally consistent, and generated artifacts match the approved structure. Fix only files generated in this execution.
 
 ## Hard Approval Gate
 
-- `Generate Artifacts Now` is the only phrase that authorizes generation.
-- General requests like "generate artifacts", "create UiGraph files", or "go ahead" are not enough. Ask for the exact phrase before writing artifacts.
+- The user's message must contain the word `Generate`. "generate", "generate now", and "ok generate the artifacts" all count. Messages without that word, such as "go ahead", "sounds good", or "yes", do not. Ask them to reply with `Generate`.
 - Before approval, only inspect files and ask questions. Do not write `.uigraph.yaml`, `.uigraph/**`, or project helper scripts.
 - If there is not enough evidence for an artifact category, say so and propose only artifacts that can be supported by discovered evidence or explicit user input.
 
@@ -104,6 +103,7 @@ After generating artifacts, the LLM/agent must verify the generated structure be
 - The exact `.uigraph.yaml` schema and validation rules
 - How to link artifacts together (test cases → APIs, maps → test cases, etc.)
 - The `context.json` format and structured examples for architecture diagrams
+- How `sequenceDiagram` files differ from flowcharts, including their generated node IDs
 - Node-specific diagram context examples in `assets/templates/diagram-context/`
 - The DynamoDB/MongoDB JSON schema format
 - Map/Frame/FocalPoint/Component structure
@@ -118,6 +118,7 @@ After generating artifacts, the LLM/agent must verify the generated structure be
 | `references/validation-rules.md`        | All hard constraints, enums, and file-existence checks      |
 | `references/service-dependencies.md`    | Service `dependencies` schema, criticality, and type rules  |
 | `references/architecture-diagrams.md`   | Mermaid + context.json specs and node-specific example file map |
+| `references/sequence-diagrams.md`       | `sequenceDiagram` syntax surface and its generated-ID context scheme |
 | `references/database-schemas.md`        | SQL config and NoSQL JSON format                            |
 | `references/test-packs-and-cases.md`    | Test pack and test case structure                           |
 | `references/maps-frames-focalpoints.md` | Map, Frame, FocalPoint, and Component linking               |
@@ -138,5 +139,7 @@ All copy-pasteable templates live in `assets/templates/`.
 | `mysql-schema-example.sql` | SQL database schema |
 | `dynamodb-schema-example.json` | NoSQL (DynamoDB/MongoDB) schema |
 | `context-example.json` | Architecture diagram context.json |
+| `sequence-diagram-example.mmd` | Sequence diagram `.mmd` covering participants, boxes, blocks, activations, notes |
+| `sequence-context-example.json` | Sequence diagram context.json keyed by generated node IDs |
 | `diagram-context/*.context.json` | Node-specific context.json examples |
 | `github-actions.yml`, `gitlab-ci.yml`, `bitbucket-pipelines.yml` | CI/CD pipelines |

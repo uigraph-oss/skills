@@ -22,6 +22,8 @@ Standard Mermaid syntax. Supported diagram types:
 - `flowchart`
 - `sequenceDiagram`
 
+A file whose first diagram keyword is `sequenceDiagram` is converted by the sequence pipeline, which has its own syntax surface and a different context key scheme. See `references/sequence-diagrams.md` before writing one; the rest of this file describes flowchart-style diagrams.
+
 Node IDs in the Mermaid file must match keys in `context.json` when context is provided.
 
 ```mermaid
@@ -50,6 +52,25 @@ The converter uses context fields to change node types, add component fields, re
 - Node `borderAnimationEnabled` also sets `strokeAnimation` to `dash`.
 - `edges["<source>-<target>"]` applies only when source and target match the converted Mermaid edge.
 - `groups` is optional and should be omitted unless the source project or user request gives an explicit boundary to represent, such as a named deployment zone, trust boundary, bounded context, network segment, team ownership area, or compliance/security boundary.
+- `groups[<group-id>]` must be an **object**, never an array of node IDs. The converter rejects the array form with `groups.<id>: Expected object, received array`.
+
+```json
+{
+  "groups": {
+    "private-subnet": { "name": "Private Subnet", "nodes": ["api", "worker"] }
+  }
+}
+```
+
+Incorrect, and the most common mistake:
+
+```json
+{
+  "groups": {
+    "private-subnet": ["api", "worker"]
+  }
+}
+```
 
 ## Node Behavior
 
@@ -67,8 +88,8 @@ The converter uses context fields to change node types, add component fields, re
 - `image` uses `src` as the image source.
 - `gif` uses `animatedIcon` for known animated assets or `src` for direct GIF URLs.
 - `comment` is useful for review notes and unresolved diagram annotations.
-- `sequenceParticipant` represents sequence-style participants with participant metadata.
-- `groups` supports only `name` and `nodes`; group bounds are calculated from referenced nodes.
+- `sequenceParticipant` is produced automatically for participants in a `sequenceDiagram` file; never set it by hand as a context `type`. See `references/sequence-diagrams.md`.
+- `groups` supports only `name` and `nodes`, both optional; group bounds are calculated from referenced nodes. A group value is always an object, so a group that only lists members is written as `{ "nodes": [...] }`.
 
 ## Node Context Examples
 

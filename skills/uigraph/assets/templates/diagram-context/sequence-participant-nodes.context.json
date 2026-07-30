@@ -1,24 +1,16 @@
 {
   "name": "Sequence participant examples",
-  "description": "Sequence participant nodes represent sequence-style participants with participant metadata.",
+  "description": "Context for a sequenceDiagram file. Keys are generated node IDs (participant-<id>), not the participant names in the .mmd. Never set type or ___internal on a participant. See references/sequence-diagrams.md.",
   "nodes": {
-    "paymentService": {
-      "type": "sequenceParticipant",
+    "participant-paymentService": {
       "name": "Payment Service",
       "data": {
         "Owner": { "type": "Text Input", "value": "Payments Team" }
-      },
-      "___internal": {
-        "label": "Payment Service",
-        "rowCount": 8,
-        "color": "#f59e0b"
       }
     },
-    "checkoutUi": {
-      "type": "sequenceParticipant",
+    "participant-checkoutUi": {
       "name": "Checkout UI",
       "data": {
-        "Label": { "type": "Text Input", "value": "Checkout UI" },
         "Color": { "type": "Color Picker", "value": "#2563eb" }
       }
     }

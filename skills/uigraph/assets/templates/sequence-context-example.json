@@ -1,0 +1,27 @@
+{
+  "name": "Checkout Sequence Context",
+  "description": "Participant metadata for sequence-diagram-example.mmd. Keys are generated node IDs: participant-<id> uses the id left of `as`, not the alias.",
+  "nodes": {
+    "participant-API": {
+      "name": "Orders API",
+      "data": {
+        "Service": { "type": "Text Input", "value": "orders-service" },
+        "Owner": { "type": "Text Input", "value": "Checkout Team" },
+        "Color": { "type": "Color Picker", "value": "#2563eb" }
+      }
+    },
+    "participant-DB": {
+      "name": "Orders DB",
+      "data": {
+        "Engine": { "type": "Text Input", "value": "PostgreSQL 16" },
+        "Table": { "type": "Text Input", "value": "orders" }
+      }
+    },
+    "participant-PSP": {
+      "data": {
+        "Vendor": { "type": "Text Input", "value": "Stripe" },
+        "Timeout": { "type": "Number Input", "value": 8000 }
+      }
+    }
+  }
+}

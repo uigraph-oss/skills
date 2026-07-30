@@ -1,0 +1,29 @@
+sequenceDiagram
+  title: Checkout Sequence
+  autonumber
+
+  box Frontend
+    participant U as User
+    participant W as Web App
+  end
+  participant API@{ "type": "boundary", "alias": "Orders API" }
+  participant DB@{ "type": "database" }
+  participant PSP as Payment Provider
+
+  U->>+W: click checkout
+  W->>+API: POST /orders
+  API->>DB: insert order (pending)
+
+  alt card accepted
+    API->>+PSP: authorize
+    PSP-->>-API: approved
+    API->>DB: mark paid
+    API-->>W: 201 Created
+  else declined
+    API->>DB: mark failed
+    API--xW: 402 Payment Required
+  end
+
+  Note over U,W: result is rendered inline
+  W-->>-U: confirmation
+  deactivate API
