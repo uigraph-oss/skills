@@ -2,6 +2,17 @@
 
 The CLI requires the `UIGRAPH_TOKEN` environment variable.
 
+## Installing the CLI
+
+The CLI is distributed from the `uigraph-oss/uigraph-cli` repository on GitHub. Install it with Go:
+
+```bash
+go install github.com/uigraph-oss/uigraph-cli@latest
+export PATH="$PATH:$(go env GOPATH)/bin"
+```
+
+For other installation methods, including the published Docker image, read the installation section of that repository's README before running any command.
+
 ## CLI Command
 
 ```bash
@@ -33,7 +44,7 @@ jobs:
 
       - name: Install UiGraph CLI
         run: |
-          go install github.com/uigraph-app/uigraph-cli@latest
+          go install github.com/uigraph-oss/uigraph-cli@latest
           echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
 
       - name: Dry run on PR
@@ -56,7 +67,7 @@ uigraph-sync:
   stage: deploy
   image: golang:1.23
   script:
-    - go install github.com/uigraph-app/uigraph-cli@latest
+    - go install github.com/uigraph-oss/uigraph-cli@latest
     - export PATH="$PATH:$(go env GOPATH)/bin"
     - uigraph sync
   only:
@@ -71,7 +82,7 @@ uigraph-sync-dry-run:
   stage: test
   image: golang:1.23
   script:
-    - go install github.com/uigraph-app/uigraph-cli@latest
+    - go install github.com/uigraph-oss/uigraph-cli@latest
     - export PATH="$PATH:$(go env GOPATH)/bin"
     - uigraph sync --dry-run
   only:
@@ -92,20 +103,11 @@ pipelines:
     - step:
         name: UiGraph Sync
         script:
-          - go install github.com/uigraph-app/uigraph-cli@latest
+          - go install github.com/uigraph-oss/uigraph-cli@latest
           - export PATH="$PATH:$(go env GOPATH)/bin"
           - uigraph sync
         variables:
           UIGRAPH_TOKEN: $UIGRAPH_TOKEN
-```
-
-## Install Script Alternative
-
-Instead of `go install`, use the install script:
-
-```bash
-curl -sSL https://cli.uigraph.app/install.sh | sh
-uigraph sync
 ```
 
 ## Environment Variables

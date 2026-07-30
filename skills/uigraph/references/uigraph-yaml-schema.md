@@ -171,7 +171,7 @@ service:
   description: CLI tool
   repository:
     provider: github
-    url: https://github.com/NazmusSayad/mytokens
+    url: https://github.com/org/repo
 
 databases:
   - name: tokens
