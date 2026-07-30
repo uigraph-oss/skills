@@ -23,6 +23,7 @@ After generating artifacts, validate the generated structure before finishing. D
 |-------|-------------|
 | `service.repository.provider` | `github`, `gitlab`, `bitbucket` |
 | `apis[*].type` | `openapi`, `graphql`, `grpc` |
+| `dependencies[*].direction` | `upstream`, `downstream` (required) |
 | `dependencies[*].type` | `http`, `graphql`, `grpc`, `database` (optional) |
 | `dependencies[*].criticality` | `hard`, `soft` (required) |
 | `architectureDiagrams[*]` | `name` and `path` required |
@@ -114,6 +115,8 @@ For every `components` entry under a focal point:
 - `dependencies[*].name` is required and must be unique across all dependencies.
 - `dependencies[*].service` is required and names the target service depended upon.
 - `dependencies[*].service` must not equal `service.name` (no self-dependency).
+- `dependencies[*].direction` is required and must be `upstream` or `downstream`. It records where the current service sits relative to the target: `downstream` means this service calls the target; `upstream` means the target calls this service. It is stored verbatim and is never inferred.
+- Two dependencies may name the same target service with opposite directions, under two distinct `name` values, to declare a mutual relationship.
 - `dependencies[*].criticality` is required and must be `hard` or `soft`.
 - `dependencies[*].type`, when present, must be `http`, `graphql`, `grpc`, or `database`; it may be omitted.
 - `dependencies[*].apiEndpointNames[*]` must each be non-empty and unique within that dependency.
