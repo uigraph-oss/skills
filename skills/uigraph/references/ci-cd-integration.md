@@ -7,7 +7,7 @@ The CLI requires the `UIGRAPH_TOKEN` environment variable.
 The CLI is distributed from the `uigraph-oss/uigraph-cli` repository on GitHub. Install it with Go:
 
 ```bash
-go install github.com/uigraph-oss/uigraph-cli@latest
+go install github.com/uigraph-oss/uigraph-cli
 export PATH="$PATH:$(go env GOPATH)/bin"
 ```
 
@@ -44,7 +44,7 @@ jobs:
 
       - name: Install UiGraph CLI
         run: |
-          go install github.com/uigraph-oss/uigraph-cli@latest
+          go install github.com/uigraph-oss/uigraph-cli
           echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
 
       - name: Dry run on PR
@@ -67,7 +67,7 @@ uigraph-sync:
   stage: deploy
   image: golang:1.23
   script:
-    - go install github.com/uigraph-oss/uigraph-cli@latest
+    - go install github.com/uigraph-oss/uigraph-cli
     - export PATH="$PATH:$(go env GOPATH)/bin"
     - uigraph sync
   only:
@@ -82,7 +82,7 @@ uigraph-sync-dry-run:
   stage: test
   image: golang:1.23
   script:
-    - go install github.com/uigraph-oss/uigraph-cli@latest
+    - go install github.com/uigraph-oss/uigraph-cli
     - export PATH="$PATH:$(go env GOPATH)/bin"
     - uigraph sync --dry-run
   only:
@@ -103,7 +103,7 @@ pipelines:
     - step:
         name: UiGraph Sync
         script:
-          - go install github.com/uigraph-oss/uigraph-cli@latest
+          - go install github.com/uigraph-oss/uigraph-cli
           - export PATH="$PATH:$(go env GOPATH)/bin"
           - uigraph sync
         variables:
