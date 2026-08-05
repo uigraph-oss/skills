@@ -89,6 +89,7 @@ testCases:
 | `mapName` | string | no | Map to link to |
 | `frameName` | string | no | Frame to link to |
 | `focalPointName` | string | no | Focal point to link to |
+| `screenshots` | list | no | Reference image paths; see [Reference Screenshots](#reference-screenshots) |
 
 ## Manual Test Case
 
@@ -137,6 +138,31 @@ testCases:
 | `postconditions` | string | no | Expected state after test |
 | `requiresEvidence` | bool | no | Whether screenshot/log is required |
 | `isCritical` | bool | no | Whether test is critical |
+| `screenshots` | list | no | Reference image paths; see [Reference Screenshots](#reference-screenshots) |
+
+## Reference Screenshots
+
+Any test case, `api` or `manual`, may carry `screenshots`: reference images showing the
+expected visual result, attached to the case in UiGraph.
+
+```yaml
+- title: Checkout success path
+  type: manual
+  order: 1
+  screenshots:
+    - .uigraph/tests/screenshots/checkout-confirmation.png
+```
+
+- Each path must point to an existing file, resolved relative to the working directory
+  where the CLI runs. A directory is rejected — there is no expansion.
+- The extension must be one of `.png`, `.jpg`, `.jpeg`, `.gif`, `.webp`, `.svg`. The
+  check is on the extension, not the file contents.
+- Generated screenshots must live under `.uigraph/tests/screenshots/`.
+- Uploads are content-addressed: an unchanged file is skipped on re-sync.
+- Do not invent screenshot paths. Reference only images the user already has or has
+  explicitly asked to be captured. A path that does not exist fails the whole sync.
+- `screenshots` are reference images on the case definition. They are unrelated to
+  `requiresEvidence`, which asks a test runner to attach evidence at execution time.
 
 ## Linking Rules
 
