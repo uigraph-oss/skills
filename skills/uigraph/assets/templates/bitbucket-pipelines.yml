@@ -10,3 +10,16 @@ pipelines:
           - uigraph sync
         variables:
           UIGRAPH_TOKEN: $UIGRAPH_TOKEN
+
+  tags:
+    'v*':
+      - step:
+          name: UiGraph Release
+          clone:
+            depth: full
+          script:
+            - go install github.com/uigraph-oss/uigraph-cli
+            - export PATH="$PATH:$(go env GOPATH)/bin"
+            - uigraph release
+          variables:
+            UIGRAPH_TOKEN: $UIGRAPH_TOKEN

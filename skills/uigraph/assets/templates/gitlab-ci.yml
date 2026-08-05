@@ -26,3 +26,18 @@ uigraph-sync-dry-run:
     UIGRAPH_TOKEN: $UIGRAPH_TOKEN
   tags:
     - docker
+
+uigraph-release:
+  stage: deploy
+  image: golang:1.23
+  script:
+    - go install github.com/uigraph-oss/uigraph-cli
+    - export PATH="$PATH:$(go env GOPATH)/bin"
+    - uigraph release
+  only:
+    - tags
+  variables:
+    UIGRAPH_TOKEN: $UIGRAPH_TOKEN
+    GIT_DEPTH: 0
+  tags:
+    - docker

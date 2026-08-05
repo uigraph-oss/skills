@@ -33,11 +33,28 @@ apis:
     path: .uigraph/openapi/admin.yaml
 
 dependencies:
-  - name: payments-events
+  - name: payments-charge-api
     service: Payments Service
-    type: event
+    direction: downstream
+    criticality: hard
+    type: http
+    description: Authorizes and captures payments during checkout
+    apiGroupName: payments-api
+    apiEndpointNames:
+      - CreateCharge
+      - CaptureCharge
+  - name: reporting-warehouse
+    service: Reporting Warehouse
+    direction: downstream
     criticality: soft
-    description: Receives completed payment events
+    type: database
+    databaseName: reporting
+  - name: storefront-web
+    service: Storefront Web
+    direction: upstream
+    criticality: hard
+    type: http
+    description: Browser client that calls the storefront API
 
 architectureDiagrams:
   - name: Checkout Flow
@@ -113,6 +130,8 @@ testPacks:
         mapName: Storefront
         frameName: Checkout
         focalPointName: Place Order
+        screenshots:
+          - .uigraph/tests/screenshots/order-confirmation.png
 
 docs:
   - name: API Guide
@@ -123,6 +142,20 @@ docs:
     path: .uigraph/docs/runbook.pdf
     fileType: pdf
     description: Operational runbook for on-call
+
+costTags:
+  - key: team
+    value: commerce
+  - key: service
+    value: ecommerce-backend
+
+timeline:
+  decisions:
+    paths:
+      - docs/adr/*.md
+  incidents:
+    paths:
+      - docs/postmortems/*.md
 
 maps:
   - name: Storefront

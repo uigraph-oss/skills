@@ -10,12 +10,20 @@ Use this file as the source of truth before generating `.uigraph.yaml`. Do not i
 - `service.repository.provider` and `service.repository.url` are required.
 - `service.ownership.team` is required whenever a `service` block is present.
 - `service.repository.provider` must be `github`, `gitlab`, or `bitbucket`.
-- A `service` block is required to sync `dependencies`; configs without a service may only sync maps and frames.
+- A `service` block is required to sync `dependencies`, `costTags`, and `timeline`; configs without a service may only sync maps and frames.
 - `dependencies[*].name` is required, must be unique, and is the stable upsert key for the dependency edge.
-- `dependencies[*].service` is required and names the target service depended upon; it must not equal `service.name`.
+- `dependencies[*].service` is required and names the target service; it must not equal `service.name`.
+- `dependencies[*].direction` is required and must be `upstream` or `downstream`.
 - `dependencies[*].criticality` is required and must be `hard` or `soft`.
 - `dependencies[*].type`, when set, must be `http`, `graphql`, `grpc`, or `database`.
 - `dependencies[*].apiEndpointNames[*]` must each be non-empty and unique within the dependency.
+- `costTags[*].key` and `costTags[*].value` are both required; the key/value pair must be unique.
+- `costTags` is a declarative set: omitting it leaves existing rules alone, and including it deletes any rule not listed.
+- `timeline.*.paths` globs are single-level; `**` is not supported.
+- `timeline.releases.changelogPath`, when set, must point to an existing file.
+- `testPacks[*].testCases[*].screenshots[*]` must point to an existing image file with a `.png`, `.jpg`, `.jpeg`, `.gif`, `.webp`, or `.svg` extension.
+- `ml[*].type` must be `model` or `training`, and decides which of `models`/`experiments` is required and which is forbidden.
+- `ml[*].source.type` must be `mlflow`, with exactly one of `url` or `urlEnv`.
 - Generated API specs must be under `.uigraph/openapi/`.
 - Generated architecture diagrams and context files must be under `.uigraph/diagrams/`.
 - Generated database schemas must be under `.uigraph/db/`.
@@ -56,25 +64,15 @@ service:
     jira:
       url: https://example.atlassian.net/projects/ABC
 
-dependencies:                  # optional; direct upstream services only
-  - name: inventory-api         # required: stable synchronization key
-    service: inventory-service  # required: provider service name
-    type: http                  # required: http, grpc, event, queue, database
-    criticality: hard           # required: hard, soft
-    description: Reserve stock before checkout
-    api: inventory-api          # required for http and grpc
-    operations:                 # optional; provider API operation IDs
-      - getSkuAvailability
-      - reserveInventory
-
 apis:                           # optional
   - name: public-api            # required
     type: openapi               # required: openapi, graphql, grpc
     path: .uigraph/openapi/public-api.yaml  # required
 
-dependencies:                   # optional; other services or datastores this service depends on
+dependencies:                   # optional; other services or datastores this service relates to
   - name: gateway-sync-api      # required: unique upsert key for the dependency edge
     service: UIGraph Gateway    # required: target service name; must not equal service.name
+    direction: downstream       # required: upstream, downstream — "downstream" means this service calls the target
     criticality: hard           # required: hard, soft
     type: http                  # optional: http, graphql, grpc, database
     description: Sends synced catalog metadata to the gateway.  # optional
@@ -83,9 +81,14 @@ dependencies:                   # optional; other services or datastores this se
       - SyncCatalog
   - name: orders-store          # example database dependency
     service: Orders DB          # required
+    direction: downstream       # required
     criticality: soft           # required
     type: database              # optional
     databaseName: orders        # optional: datastore name for database-type dependencies
+  - name: storefront-consumers  # example inbound edge
+    service: Storefront         # required
+    direction: upstream         # the storefront calls this service
+    criticality: soft           # required
 
 architectureDiagrams:           # optional
   - name: Request Flow          # required
@@ -121,6 +124,8 @@ testPacks:                      # optional; UiGraph metadata only, not Vitest/Je
         apiGroupName: public-api
         operationId: healthCheck
         expectedStatusCode: 200
+        screenshots:            # optional; reference images attached to the case
+          - .uigraph/tests/screenshots/health-200.png  # must exist; .png .jpg .jpeg .gif .webp .svg
     testCasesPath: .uigraph/tests/api-smoke.yaml  # optional; file holds a `testCases:` list, merged with inline testCases
 
 docs:                           # optional
@@ -128,6 +133,44 @@ docs:                           # optional
     path: .uigraph/docs/runbook.md  # required
     fileType: markdown          # optional: pdf, html, markdown, doc, txt, image, video, audio, other
     description: On-call runbook
+
+costTags:                       # optional; see references/cost-tags-and-timeline.md
+  - key: team                   # required: cloud tag key, matched exactly
+    value: checkout             # required: cloud tag value, matched exactly
+  - key: Service                # the same key may repeat with a different value
+    value: booking-api          # the key/value PAIR must be unique
+
+timeline:                       # optional; see references/cost-tags-and-timeline.md
+  decisions:
+    paths:                      # single-level globs only; `**` is NOT supported
+      - docs/adr/*.md
+  incidents:
+    paths:
+      - docs/postmortems/*.md
+  releases:
+    changelogPath: CHANGELOG.md # must exist; omit when the pipeline runs `uigraph release`
+
+ml:                             # optional; pulled from MLflow, not from repo files
+  - name: Recommendations       # required
+    type: model                 # required: model, training
+    description: Ranking models for the product feed.  # optional
+    ownership:                  # optional
+      team: ml-platform
+      email: ml@example.com
+    source:
+      type: mlflow              # required: must be mlflow
+      urlEnv: MLFLOW_URL        # exactly one of url or urlEnv; the env var must be set and non-empty
+      tokenEnv: MLFLOW_TOKEN    # optional; when set the env var must be set and non-empty
+    models:                     # required for type: model; forbidden for type: training
+      - name: feed-ranker       # required
+        problemType: ranking    # optional: classification, regression, ranking, generation, embedding, other
+  - name: Recommendations Training
+    type: training
+    source:
+      type: mlflow
+      url: http://localhost:5000  # inline alternative to urlEnv
+    experiments:                # required for type: training; forbidden for type: model
+      - name: feed-ranker-sweeps  # required
 
 maps:                           # optional; see references/maps-frames-focalpoints.md
   - name: Product Map           # required
@@ -147,11 +190,11 @@ maps:                           # optional; see references/maps-frames-focalpoin
                 operationId: healthCheck
 ```
 
-## Component Link Rules
-
 ## Dependency Rules
 
-Dependencies declare only direct upstream relationships. A provider that has not been onboarded is retained as an unresolved dependency and does not fail synchronization. When the provider is already onboarded, HTTP and gRPC declarations are validated against its current API specification and declared operation IDs during the consumer sync. Removing a dependency from `.uigraph.yaml` removes the stored relationship on the next sync.
+Each dependency declares one directed relationship. `direction` records where the current service sits relative to the target and is stored verbatim — it is never inferred, normalized, or swapped. A target service that has not been onboarded is retained as an unresolved dependency and does not fail synchronization. Removing a dependency from `.uigraph.yaml` removes the stored relationship on the next sync.
+
+## Component Link Rules
 
 When `componentLinkId` is absent, component links must include these fields:
 
@@ -193,6 +236,7 @@ This is invalid because:
 ## Detailed References
 
 - Service dependencies: `references/service-dependencies.md`
+- Cost tags and timeline: `references/cost-tags-and-timeline.md`
 - Test packs and test cases: `references/test-packs-and-cases.md`
 - Maps, frames, and focal points: `references/maps-frames-focalpoints.md`
 - Database schemas: `references/database-schemas.md`

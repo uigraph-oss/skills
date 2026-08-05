@@ -34,6 +34,10 @@ After generating artifacts, validate the generated structure before finishing. D
 | `docs[*].fileType` | `pdf`, `html`, `markdown`, `doc`, `txt`, `image`, `video`, `audio`, `other` |
 | `maps[*].frames[*].focalPoints[*].visibility` | `public`, `private` |
 | `maps[*].frames[*].focalPoints[*].components[*].componentId` | `component_api-contract`, `component_test-case-suite`, `component_support-kb-troubleshooting`, `component_backend-flow-diagram` |
+| `testCases[*].screenshots[*]` extension | `.png`, `.jpg`, `.jpeg`, `.gif`, `.webp`, `.svg` |
+| `ml[*].type` | `model`, `training` (required) |
+| `ml[*].source.type` | `mlflow` (required) |
+| `ml[*].models[*].problemType` | `classification`, `regression`, `ranking`, `generation`, `embedding`, `other` (optional) |
 
 ## File Existence Checks
 
@@ -48,6 +52,12 @@ All `path` fields must point to files that exist relative to `.uigraph.yaml`:
 - `queries[*].path` (when set instead of `queryText`)
 - `queryFiles[*]` (each must be a YAML file with a `queries:` list)
 - `testPacks[*].testCasesPath` (when set; a YAML file with a `testCases:` list)
+- `testPacks[*].testCases[*].screenshots[*]` (must be a file, not a directory)
+- `timeline.releases.changelogPath` (when set)
+
+`timeline.decisions.paths` and `timeline.incidents.paths` are the exception: they are
+glob patterns, and a pattern matching nothing is not an error. Verify by inspection that
+each pattern actually matches files in the repository.
 
 Generated artifact paths must stay under `.uigraph/`:
 
@@ -57,6 +67,7 @@ Generated artifact paths must stay under `.uigraph/`:
 - `databases[*].schemaPath` must be under `.uigraph/db/`.
 - `docs[*].path` must be under `.uigraph/docs/` when generated.
 - `maps[*].frames[*].imagePath` must be under `.uigraph/maps/` when generated.
+- `testPacks[*].testCases[*].screenshots[*]` must be under `.uigraph/tests/screenshots/` when generated.
 
 ## Repository URL Checks
 
@@ -112,6 +123,13 @@ For every `components` entry under a focal point:
 3. If `componentId` is `component_backend-flow-diagram` and `componentLinkId` is empty: `serviceName` and `architectureDiagramName` are both required.
 4. If `componentId` is `component_api-contract` and `componentLinkId` is empty: `serviceName`, `apiGroupName`, and `operationId` are all required.
 
+## Sections That Require a Service Block
+
+A config without a `service` block may only sync maps and frames. These sections are
+rejected outright when `service.name` is empty: `apis`, `dependencies`,
+`architectureDiagrams`, `testPacks`, `databases`, `queries`, `docs`, `costTags`,
+`timeline`.
+
 ## Service Dependency Rules
 
 - `dependencies` requires a `service` block; a config without a service may only sync maps and frames.
@@ -136,6 +154,39 @@ For every `components` entry under a focal point:
 - API test cases should link to API operations with matching `apiGroupName` and `operationId` when API evidence exists, but linking is optional — omit both for a case not tied to a synced endpoint (e.g. a custom URL).
 - When `type` is `api` and `operationId` is set, it must reference an existing API group and operation. A set `operationId` that does not resolve to a synced endpoint fails the sync (no silent fallback to `GET`).
 - When it resolves, the test case is stored with a real link to that API spec (`apiSpecId`) plus the endpoint's HTTP method, matching UI-authored cases.
+- `testCases[*].screenshots[*]` must point to an existing file that is not a directory, with a `.png`, `.jpg`, `.jpeg`, `.gif`, `.webp`, or `.svg` extension. Do not invent screenshot paths — a missing file fails the whole sync.
+
+## Cost Tag Rules
+
+- `costTags` requires a `service` block.
+- `costTags[*].key` and `costTags[*].value` are both required and must be non-empty.
+- The `key`/`value` pair must be unique across the list. The same key with different values is allowed.
+- `costTags` is declarative: omitting it leaves existing rules untouched, while including it makes the file own the full set — any rule not listed is deleted on sync, and `costTags: []` deletes them all.
+- Do not generate `costTags` speculatively or as an empty list. Omit the section unless the user supplied real tag keys and values.
+
+## Timeline Rules
+
+- `timeline` requires a `service` block.
+- `timeline.decisions.paths[*]` and `timeline.incidents.paths[*]` must each be non-empty strings.
+- Path patterns are single-level globs. `**` is not supported and matches nothing.
+- `timeline.releases.changelogPath`, when set, must point to an existing file.
+- Every decision and incident file must yield a title: front-matter `title` or a `# ` heading. A file with neither fails the sync.
+- A decision `status`, when present, must be `proposed`, `accepted`, `superseded`, or `deprecated`.
+- Explicit dates (front matter, filename) must be `YYYY-MM-DD` or RFC 3339. A malformed date fails the sync rather than falling back.
+- Changelog `##` headings must begin with a digit, optionally bracketed and optionally `v`-prefixed. Other headings, including `## [Unreleased]`, produce no events.
+- Do not configure `timeline.releases.changelogPath` when the pipeline runs `uigraph release`. Both write the same `release:<version>` event and overwrite each other.
+
+## ML Project Rules
+
+- `ml[*].name` is required.
+- `ml[*].type` must be `model` or `training`.
+- A `model` project must declare `models` and must not declare `experiments`.
+- A `training` project must declare `experiments` and must not declare `models`.
+- `ml[*].source.type` must be `mlflow`.
+- Exactly one of `ml[*].source.url` and `ml[*].source.urlEnv` must be set.
+- Environment variables named by `urlEnv` and `tokenEnv` must be set and non-empty at validation time, or the sync fails before contacting anything.
+- `ml[*].models[*].name` and `ml[*].experiments[*].name` are required.
+- `ml` reads from a live MLflow server, not from repository files. Do not generate it without an MLflow URL from the user.
 
 ## Frame Image Rules
 
