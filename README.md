@@ -1,6 +1,6 @@
-# UiGraph Skill
+# UIGraph Skill
 
-Plan and generate UiGraph artifacts.
+Plan and generate UIGraph artifacts.
 
 ## Install
 
