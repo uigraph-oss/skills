@@ -1,8 +1,5 @@
 version: 1
 
-project:
-  name: my-product
-
 service:
   name: My Service
   category: Backend

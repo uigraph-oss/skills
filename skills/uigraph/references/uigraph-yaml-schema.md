@@ -5,7 +5,6 @@ Use this file as the source of truth before generating `.uigraph.yaml`. Do not i
 ## Hard Rules
 
 - `version: 1` is required.
-- `project.name` is required.
 - `service.name`, `service.category`, and `service.description` are required.
 - `service.repository.provider` and `service.repository.url` are required.
 - `service.ownership.team` is required whenever a `service` block is present.
@@ -41,10 +40,6 @@ Use this file as the source of truth before generating `.uigraph.yaml`. Do not i
 
 ```yaml
 version: 1
-
-project:
-  name: my-product              # required
-  environment: production       # optional
 
 service:
   name: My Service              # required
@@ -230,7 +225,6 @@ apis:
 This is invalid because:
 
 - It is missing required `version: 1`.
-- It is missing required `project.name`.
 - Generated artifact paths are outside `.uigraph/`.
 
 ## Detailed References

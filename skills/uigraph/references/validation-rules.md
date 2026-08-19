@@ -8,8 +8,6 @@ After generating artifacts, validate the generated structure before finishing. D
 
 - `version` must be `1`
 - `version` is required
-- `project.name` must not be empty
-- `project.name` is required
 - `service.name` must not be empty
 - `service.category` must not be empty
 - `service.description` must not be empty
