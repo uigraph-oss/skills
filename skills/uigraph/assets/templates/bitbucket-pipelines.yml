@@ -1,3 +1,6 @@
+# Set UIGRAPH_TOKEN and UIGRAPH_GATEWAY_URL as repository variables.
+# On hosted UiGraph, drop UIGRAPH_GATEWAY_URL and add --enterprise to each uigraph command.
+
 image: golang:1.23
 
 pipelines:
@@ -10,6 +13,7 @@ pipelines:
           - uigraph sync
         variables:
           UIGRAPH_TOKEN: $UIGRAPH_TOKEN
+          UIGRAPH_GATEWAY_URL: $UIGRAPH_GATEWAY_URL
 
   tags:
     'v*':
@@ -23,3 +27,4 @@ pipelines:
             - uigraph release
           variables:
             UIGRAPH_TOKEN: $UIGRAPH_TOKEN
+            UIGRAPH_GATEWAY_URL: $UIGRAPH_GATEWAY_URL

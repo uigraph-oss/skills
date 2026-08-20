@@ -1,3 +1,6 @@
+# Set UIGRAPH_TOKEN and UIGRAPH_GATEWAY_URL as CI/CD variables.
+# On hosted UiGraph, drop UIGRAPH_GATEWAY_URL and add --enterprise to each uigraph command.
+
 uigraph-sync:
   stage: deploy
   image: golang:1.23
@@ -10,6 +13,7 @@ uigraph-sync:
     - master
   variables:
     UIGRAPH_TOKEN: $UIGRAPH_TOKEN
+    UIGRAPH_GATEWAY_URL: $UIGRAPH_GATEWAY_URL
   tags:
     - docker
 
@@ -24,6 +28,7 @@ uigraph-sync-dry-run:
     - merge_requests
   variables:
     UIGRAPH_TOKEN: $UIGRAPH_TOKEN
+    UIGRAPH_GATEWAY_URL: $UIGRAPH_GATEWAY_URL
   tags:
     - docker
 
@@ -38,6 +43,7 @@ uigraph-release:
     - tags
   variables:
     UIGRAPH_TOKEN: $UIGRAPH_TOKEN
+    UIGRAPH_GATEWAY_URL: $UIGRAPH_GATEWAY_URL
     GIT_DEPTH: 0
   tags:
     - docker
