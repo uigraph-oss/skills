@@ -104,9 +104,14 @@ Generated artifact paths must stay under `.uigraph/`:
 - Mermaid node IDs must match keys in `context.nodes` when node context is used, for flowchart-style diagrams.
 - Sequence diagram context must key `context.nodes` on generated IDs (`participant-<id>`, `message-<row>`, `note-<row>`), never on the bare participant name.
 - Sequence diagram context must not set `type` or `___internal` on `participant-*` nodes, and must not declare `groups`.
+- C4 diagram context must key `context.nodes` on element aliases, must never key on a boundary id, and must not declare `groups`.
+- A C4 `Rel` must have concrete elements at both ends or boundary ids at both ends, never one of each.
+- Whenever a C4 diagram holds two or more boundaries at the same nesting level, every one of those boundaries must be the source or the target of at least one boundary relationship.
+- C4 boundary relationships must be written in addition to the element relationships they summarise, never instead of them.
 - `groups[*]` must be an object with optional `name` and `nodes`, never a bare array of node IDs.
 - `groups[*].nodes` entries must reference existing `context.nodes` keys.
 - `edges` keys must follow `<source>-<target>` for Mermaid edges when edge context is used.
+- Edge labels must be four words at most, in every diagram type.
 - Context must avoid fields not supported by the converter schema, especially group `style` and node style `backgroundColor`.
 - Node `data[*].type` must use one of the supported component field type names documented in `references/architecture-diagrams.md`.
 - Node `shape` values must use one of the supported shape values documented in `references/architecture-diagrams.md`.

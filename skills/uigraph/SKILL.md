@@ -108,6 +108,7 @@ After generating artifacts, the LLM/agent must verify the generated structure be
 - How to link artifacts together (test cases → APIs, maps → test cases, etc.)
 - The `context.json` format and structured examples for architecture diagrams
 - How `sequenceDiagram` files differ from flowcharts, including their generated node IDs
+- How C4 files differ from flowcharts, including boundaries and the boundary relationships a zoomed-out diagram needs
 - Node-specific diagram context examples in `assets/templates/diagram-context/`
 - The DynamoDB/MongoDB JSON schema format
 - Map/Frame/FocalPoint/Component structure
@@ -126,6 +127,7 @@ After generating artifacts, the LLM/agent must verify the generated structure be
 | `references/cost-tags-and-timeline.md`  | `costTags` declarative semantics, `timeline` scanning, and `uigraph release` |
 | `references/architecture-diagrams.md`   | Mermaid + context.json specs and node-specific example file map |
 | `references/sequence-diagrams.md`       | `sequenceDiagram` syntax surface and its generated-ID context scheme |
+| `references/c4-diagrams.md`             | C4 levels, elements, boundaries, and the required boundary relationships |
 | `references/database-schemas.md`        | SQL config and NoSQL JSON format                            |
 | `references/test-packs-and-cases.md`    | Test pack and test case structure                           |
 | `references/maps-frames-focalpoints.md` | Map, Frame, FocalPoint, and Component linking               |

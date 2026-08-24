@@ -27,11 +27,13 @@ The first diagram keyword in the file picks the pipeline that converts it, and e
 
 A file whose first diagram keyword is `sequenceDiagram` is converted by the sequence pipeline, which has its own syntax surface and a different context key scheme. See `references/sequence-diagrams.md` before writing one; the rest of this file describes flowchart-style diagrams.
 
-A file whose first diagram keyword starts with `C4` is converted by the C4 pipeline. Node IDs are the element aliases, so `Person(user, "User")` is keyed as `user` in `context.json`. Do not hand-write C4 diagrams to describe a system that a flowchart already describes well. Write one when the user asks for C4 specifically, or when the repository already documents itself in C4 terms. The most reliable C4 pair comes from the UiGraph diagram editor: draw or adjust the diagram there and use **Export To Mermaid**, which writes the `.mmd` and its context file together.
+A file whose first diagram keyword starts with `C4` is converted by the C4 pipeline, which has its own element, boundary, and relationship rules. See `references/c4-diagrams.md` before writing one; the rest of this file describes flowchart-style diagrams.
 
 `stateDiagram-v2` keeps the named states and the transitions between them. The `[*]` start and end markers are not nodes and do not appear in `context.json`.
 
 Node IDs in the Mermaid file must match keys in `context.json` when context is provided.
+
+An edge label is four words at most, never a sentence. Labels are drawn on top of the diagram, so a long one covers the nodes around it.
 
 ```mermaid
 flowchart LR
