@@ -1,3 +1,6 @@
+# Set UIGRAPH_TOKEN and UIGRAPH_GATEWAY_URL as repository secrets.
+# On hosted UiGraph, drop UIGRAPH_GATEWAY_URL and add --enterprise to each uigraph command.
+
 name: UiGraph
 
 on:
@@ -26,12 +29,14 @@ jobs:
         if: github.event_name == 'pull_request'
         env:
           UIGRAPH_TOKEN: ${{ secrets.UIGRAPH_TOKEN }}
+          UIGRAPH_GATEWAY_URL: ${{ secrets.UIGRAPH_GATEWAY_URL }}
         run: uigraph sync --dry-run
 
       - name: Sync to UiGraph on push
         if: github.event_name == 'push'
         env:
           UIGRAPH_TOKEN: ${{ secrets.UIGRAPH_TOKEN }}
+          UIGRAPH_GATEWAY_URL: ${{ secrets.UIGRAPH_GATEWAY_URL }}
         run: uigraph sync
 
   uigraph-release:
@@ -54,4 +59,5 @@ jobs:
       - name: Record release on the UiGraph timeline
         env:
           UIGRAPH_TOKEN: ${{ secrets.UIGRAPH_TOKEN }}
+          UIGRAPH_GATEWAY_URL: ${{ secrets.UIGRAPH_GATEWAY_URL }}
         run: uigraph release

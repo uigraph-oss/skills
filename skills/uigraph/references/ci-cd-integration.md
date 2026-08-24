@@ -1,6 +1,12 @@
 # CI/CD Integration
 
-The CLI requires the `UIGRAPH_TOKEN` environment variable.
+The CLI requires the `UIGRAPH_TOKEN` environment variable and a gateway URL.
+
+Set the gateway URL with `UIGRAPH_GATEWAY_URL` or `--api-url` when the gateway is
+self-hosted. On hosted UiGraph, pass `--enterprise` instead and the CLI resolves the URL
+itself, so neither the variable nor the flag is needed. `--enterprise=DEV` targets the dev
+environment. `--api-url` and `--enterprise` cannot be passed together, and a command with
+none of the three exits with code `1`.
 
 ## Installing the CLI
 
@@ -19,7 +25,10 @@ For other installation methods, including the published Docker image, read the i
 uigraph sync
 uigraph sync --config .uigraph.yaml
 uigraph sync --dry-run
-uigraph sync --api-url https://api.prod.uigraph.app/uigraph-gateway
+uigraph sync --verbose
+uigraph sync --api-url https://gateway.your-org.com
+uigraph sync --enterprise
+uigraph sync --enterprise=DEV --dry-run
 ```
 
 `uigraph release` records one release event on the service timeline and exits. It reads
@@ -31,6 +40,7 @@ uigraph release
 uigraph release --version v1.4.0
 uigraph release --notes-file RELEASE_NOTES.md
 uigraph release --dry-run
+uigraph release --enterprise
 ```
 
 Notes are resolved in order: `--notes`, `--notes-file`, the annotated tag body, the
@@ -74,12 +84,14 @@ jobs:
         if: github.event_name == 'pull_request'
         env:
           UIGRAPH_TOKEN: ${{ secrets.UIGRAPH_TOKEN }}
+          UIGRAPH_GATEWAY_URL: ${{ secrets.UIGRAPH_GATEWAY_URL }}
         run: uigraph sync --dry-run
 
       - name: Sync to UiGraph on push
         if: github.event_name == 'push'
         env:
           UIGRAPH_TOKEN: ${{ secrets.UIGRAPH_TOKEN }}
+          UIGRAPH_GATEWAY_URL: ${{ secrets.UIGRAPH_GATEWAY_URL }}
         run: uigraph sync
 
   uigraph-release:
@@ -102,6 +114,7 @@ jobs:
       - name: Record release
         env:
           UIGRAPH_TOKEN: ${{ secrets.UIGRAPH_TOKEN }}
+          UIGRAPH_GATEWAY_URL: ${{ secrets.UIGRAPH_GATEWAY_URL }}
         run: uigraph release
 ```
 
@@ -120,6 +133,7 @@ uigraph-sync:
     - master
   variables:
     UIGRAPH_TOKEN: $UIGRAPH_TOKEN
+    UIGRAPH_GATEWAY_URL: $UIGRAPH_GATEWAY_URL
   tags:
     - docker
 
@@ -134,6 +148,7 @@ uigraph-sync-dry-run:
     - merge_requests
   variables:
     UIGRAPH_TOKEN: $UIGRAPH_TOKEN
+    UIGRAPH_GATEWAY_URL: $UIGRAPH_GATEWAY_URL
   tags:
     - docker
 
@@ -148,6 +163,7 @@ uigraph-release:
     - tags
   variables:
     UIGRAPH_TOKEN: $UIGRAPH_TOKEN
+    UIGRAPH_GATEWAY_URL: $UIGRAPH_GATEWAY_URL
     GIT_DEPTH: 0
   tags:
     - docker
@@ -168,6 +184,7 @@ pipelines:
           - uigraph sync
         variables:
           UIGRAPH_TOKEN: $UIGRAPH_TOKEN
+          UIGRAPH_GATEWAY_URL: $UIGRAPH_GATEWAY_URL
 
   tags:
     'v*':
@@ -181,6 +198,7 @@ pipelines:
             - uigraph release
           variables:
             UIGRAPH_TOKEN: $UIGRAPH_TOKEN
+            UIGRAPH_GATEWAY_URL: $UIGRAPH_GATEWAY_URL
 ```
 
 ## Environment Variables
@@ -188,6 +206,11 @@ pipelines:
 | Variable | Required | Description |
 |----------|----------|-------------|
 | `UIGRAPH_TOKEN` | yes | API token for gateway authentication |
+| `UIGRAPH_GATEWAY_URL` | unless `--enterprise` or `--api-url` is passed | Gateway to sync to |
+
+The templates below leave the gateway URL out of the job. Set `UIGRAPH_GATEWAY_URL` as a
+pipeline variable alongside `UIGRAPH_TOKEN`, or add `--enterprise` to each `uigraph`
+command on hosted UiGraph.
 
 ## Token Scopes
 
