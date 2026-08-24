@@ -38,7 +38,7 @@ Rel(source, queue, "Enqueues pipeline jobs on", "Redis")
 Rel(linux, registry, "Pushes images to", "OCI")
 Rel(registry, chat, "Announces published artifacts to", "HTTPS")
 
-Rel(execution, supply, "Publishes signed build artifacts to", "OCI")
+Rel(execution, supply, "Publishes artifacts to", "OCI")
 ```
 
 That covers every element (`Person`, `Person_Ext`, `System`, `System_Ext`, `Container`, `ContainerDb`, `ContainerQueue`, `Component`), the boundaries (`System_Boundary`, `Container_Boundary`, `Enterprise_Boundary`, braces required), and the relationships. `BiRel` and the directional `Rel_U` / `Rel_D` / `Rel_L` / `Rel_R` / `Rel_Back` all work too.
@@ -51,7 +51,7 @@ A boundary id is a valid relationship endpoint, and a `Rel` with a boundary id a
 
 - Whenever a diagram holds two or more boundaries at the same nesting level, every one of them must be the source or target of at least one boundary relationship. A boundary alone at its level needs none.
 - Write them in addition to the element relationships, never instead of them.
-- The label summarises everything crossing between the two boundaries in one sentence, not a copy of one inner element's label.
+- The label says what the whole boundary does, not a copy of one inner element's label.
 - Never mix a boundary id and an element id in the same `Rel`.
 
 ## Context

@@ -111,6 +111,7 @@ Generated artifact paths must stay under `.uigraph/`:
 - `groups[*]` must be an object with optional `name` and `nodes`, never a bare array of node IDs.
 - `groups[*].nodes` entries must reference existing `context.nodes` keys.
 - `edges` keys must follow `<source>-<target>` for Mermaid edges when edge context is used.
+- Edge labels must be four words at most, in every diagram type.
 - Context must avoid fields not supported by the converter schema, especially group `style` and node style `backgroundColor`.
 - Node `data[*].type` must use one of the supported component field type names documented in `references/architecture-diagrams.md`.
 - Node `shape` values must use one of the supported shape values documented in `references/architecture-diagrams.md`.

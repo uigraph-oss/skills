@@ -33,6 +33,8 @@ A file whose first diagram keyword starts with `C4` is converted by the C4 pipel
 
 Node IDs in the Mermaid file must match keys in `context.json` when context is provided.
 
+An edge label is four words at most, never a sentence. Labels are drawn on top of the diagram, so a long one covers the nodes around it.
+
 ```mermaid
 flowchart LR
   api --> worker
