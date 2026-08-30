@@ -54,7 +54,7 @@ next sync. If the user cannot name the tag keys and values, omit the section.
 
 ## Timeline
 
-Scanned on every `uigraph sync`. Each source file becomes one event, upserted by a
+Scanned on every `uigraph-cli sync`. Each source file becomes one event, upserted by a
 `sourceRef` derived from the file path or the version — never from the title — so
 retitling a file updates the event instead of duplicating it.
 
@@ -133,14 +133,14 @@ Events carry a link back to their file, built from `service.repository.url` and 
 current branch. Only `github` and `gitlab` providers have a known layout; a `bitbucket`
 repository syncs the events without a link.
 
-## `uigraph release` and the changelog compete
+## `uigraph-cli release` and the changelog compete
 
-`uigraph release` is a separate CLI command run from a tag-triggered CI job. It records
+`uigraph-cli release` is a separate CLI command run from a tag-triggered CI job. It records
 one release event and exits. It keys the event the same way the changelog scanner does —
 `release:<version without a leading v>` — so the two sources write the **same event** and
 whichever runs last overwrites the other.
 
-- The pipeline cuts releases through CI → recommend `uigraph release` and **omit**
+- The pipeline cuts releases through CI → recommend `uigraph-cli release` and **omit**
   `timeline.releases` from the config.
 - No release pipeline → keep `timeline.releases.changelogPath`.
 
@@ -154,4 +154,4 @@ Never configure both. The skill does not generate release notes or run the comma
 - `timeline.decisions`: the repository already has ADRs or decision records.
 - `timeline.incidents`: the repository already has postmortems.
 - `timeline.releases`: the repository has a changelog in the recognised format **and**
-  no CI job runs `uigraph release`.
+  no CI job runs `uigraph-cli release`.

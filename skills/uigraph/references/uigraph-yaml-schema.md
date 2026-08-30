@@ -143,7 +143,7 @@ timeline:                       # optional; see references/cost-tags-and-timelin
     paths:
       - docs/postmortems/*.md
   releases:
-    changelogPath: CHANGELOG.md # must exist; omit when the pipeline runs `uigraph release`
+    changelogPath: CHANGELOG.md # must exist; omit when the pipeline runs `uigraph-cli release`
 
 ml:                             # optional; pulled from MLflow, not from repo files
   - name: Recommendations       # required

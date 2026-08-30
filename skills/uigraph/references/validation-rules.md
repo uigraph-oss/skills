@@ -177,7 +177,7 @@ rejected outright when `service.name` is empty: `apis`, `dependencies`,
 - A decision `status`, when present, must be `proposed`, `accepted`, `superseded`, or `deprecated`.
 - Explicit dates (front matter, filename) must be `YYYY-MM-DD` or RFC 3339. A malformed date fails the sync rather than falling back.
 - Changelog `##` headings must begin with a digit, optionally bracketed and optionally `v`-prefixed. Other headings, including `## [Unreleased]`, produce no events.
-- Do not configure `timeline.releases.changelogPath` when the pipeline runs `uigraph release`. Both write the same `release:<version>` event and overwrite each other.
+- Do not configure `timeline.releases.changelogPath` when the pipeline runs `uigraph-cli release`. Both write the same `release:<version>` event and overwrite each other.
 
 ## ML Project Rules
 

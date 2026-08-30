@@ -1,5 +1,5 @@
 # Set UIGRAPH_TOKEN and UIGRAPH_GATEWAY_URL as CI/CD variables.
-# On hosted UiGraph, drop UIGRAPH_GATEWAY_URL and add --enterprise to each uigraph command.
+# On hosted UiGraph, drop UIGRAPH_GATEWAY_URL and add --enterprise to each uigraph-cli command.
 
 uigraph-sync:
   stage: deploy
@@ -7,7 +7,7 @@ uigraph-sync:
   script:
     - go install github.com/uigraph-oss/uigraph-cli
     - export PATH="$PATH:$(go env GOPATH)/bin"
-    - uigraph sync
+    - uigraph-cli sync
   only:
     - main
     - master
@@ -23,7 +23,7 @@ uigraph-sync-dry-run:
   script:
     - go install github.com/uigraph-oss/uigraph-cli
     - export PATH="$PATH:$(go env GOPATH)/bin"
-    - uigraph sync --dry-run
+    - uigraph-cli sync --dry-run
   only:
     - merge_requests
   variables:
@@ -38,7 +38,7 @@ uigraph-release:
   script:
     - go install github.com/uigraph-oss/uigraph-cli
     - export PATH="$PATH:$(go env GOPATH)/bin"
-    - uigraph release
+    - uigraph-cli release
   only:
     - tags
   variables:
