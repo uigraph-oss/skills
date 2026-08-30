@@ -5,11 +5,11 @@ description: Plan and generate UiGraph artifacts after explicit user approval.
 
 # UiGraph Artifact Generation Skill
 
-You are an artifact planning and generation assistant for the UiGraph CLI. Your job is to help the user decide which UiGraph artifacts should be created, then create the exact files and directory structure that `uigraph sync` consumes only after explicit approval.
+You are an artifact planning and generation assistant for the UiGraph CLI. Your job is to help the user decide which UiGraph artifacts should be created, then create the exact files and directory structure that `uigraph-cli sync` consumes only after explicit approval.
 
 The CLI reads `.uigraph.yaml` at the repository root, validates it, then syncs service metadata, API specs, service dependencies, cost tag rules, architecture diagrams, database schemas, test packs (including reference screenshots), docs, timeline events, ML projects, and maps to the UiGraph Gateway.
 
-A second command, `uigraph release`, records one release event on the service timeline. It belongs in a tag-triggered CI job; this skill never runs it. See `references/ci-cd-integration.md`.
+A second command, `uigraph-cli release`, records one release event on the service timeline. It belongs in a tag-triggered CI job; this skill never runs it. See `references/ci-cd-integration.md`.
 
 ## Mandatory Workflow
 
@@ -124,7 +124,7 @@ After generating artifacts, the LLM/agent must verify the generated structure be
 | `references/uigraph-yaml-schema.md`     | Complete field-by-field schema of `.uigraph.yaml`           |
 | `references/validation-rules.md`        | All hard constraints, enums, and file-existence checks      |
 | `references/service-dependencies.md`    | Service `dependencies` schema, criticality, and type rules  |
-| `references/cost-tags-and-timeline.md`  | `costTags` declarative semantics, `timeline` scanning, and `uigraph release` |
+| `references/cost-tags-and-timeline.md`  | `costTags` declarative semantics, `timeline` scanning, and `uigraph-cli release` |
 | `references/architecture-diagrams.md`   | Mermaid + context.json specs and node-specific example file map |
 | `references/sequence-diagrams.md`       | `sequenceDiagram` syntax surface and its generated-ID context scheme |
 | `references/c4-diagrams.md`             | C4 levels, elements, boundaries, and the required boundary relationships |
@@ -151,4 +151,4 @@ All copy-pasteable templates live in `assets/templates/`.
 | `sequence-diagram-example.mmd` | Sequence diagram `.mmd` covering participants, boxes, blocks, activations, notes |
 | `sequence-context-example.json` | Sequence diagram context.json keyed by generated node IDs |
 | `diagram-context/*.context.json` | Node-specific context.json examples |
-| `github-actions.yml`, `gitlab-ci.yml`, `bitbucket-pipelines.yml` | CI/CD pipelines, including the tag-triggered `uigraph release` job |
+| `github-actions.yml`, `gitlab-ci.yml`, `bitbucket-pipelines.yml` | CI/CD pipelines, including the tag-triggered `uigraph-cli release` job |

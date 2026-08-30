@@ -22,25 +22,25 @@ For other installation methods, including the published Docker image, read the i
 ## CLI Commands
 
 ```bash
-uigraph sync
-uigraph sync --config .uigraph.yaml
-uigraph sync --dry-run
-uigraph sync --verbose
-uigraph sync --api-url https://gateway.your-org.com
-uigraph sync --enterprise
-uigraph sync --enterprise=DEV --dry-run
+uigraph-cli sync
+uigraph-cli sync --config .uigraph.yaml
+uigraph-cli sync --dry-run
+uigraph-cli sync --verbose
+uigraph-cli sync --api-url https://gateway.your-org.com
+uigraph-cli sync --enterprise
+uigraph-cli sync --enterprise=DEV --dry-run
 ```
 
-`uigraph release` records one release event on the service timeline and exits. It reads
+`uigraph-cli release` records one release event on the service timeline and exits. It reads
 the tag at `HEAD`, so it belongs in a tag-triggered job with the full git history
 checked out — a shallow clone has no tags and the command fails.
 
 ```bash
-uigraph release
-uigraph release --version v1.4.0
-uigraph release --notes-file RELEASE_NOTES.md
-uigraph release --dry-run
-uigraph release --enterprise
+uigraph-cli release
+uigraph-cli release --version v1.4.0
+uigraph-cli release --notes-file RELEASE_NOTES.md
+uigraph-cli release --dry-run
+uigraph-cli release --enterprise
 ```
 
 Notes are resolved in order: `--notes`, `--notes-file`, the annotated tag body, the
@@ -49,7 +49,7 @@ matching changelog section, then the commit subjects since the previous tag.
 This skill never runs `release` and never generates release notes. It only wires the job
 into the pipeline when the user asks for CI/CD templates.
 
-If the pipeline runs `uigraph release`, omit `timeline.releases.changelogPath` from
+If the pipeline runs `uigraph-cli release`, omit `timeline.releases.changelogPath` from
 `.uigraph.yaml`. Both sources key the event as `release:<version>` and overwrite each
 other. See `references/cost-tags-and-timeline.md`.
 
@@ -85,14 +85,14 @@ jobs:
         env:
           UIGRAPH_TOKEN: ${{ secrets.UIGRAPH_TOKEN }}
           UIGRAPH_GATEWAY_URL: ${{ secrets.UIGRAPH_GATEWAY_URL }}
-        run: uigraph sync --dry-run
+        run: uigraph-cli sync --dry-run
 
       - name: Sync to UiGraph on push
         if: github.event_name == 'push'
         env:
           UIGRAPH_TOKEN: ${{ secrets.UIGRAPH_TOKEN }}
           UIGRAPH_GATEWAY_URL: ${{ secrets.UIGRAPH_GATEWAY_URL }}
-        run: uigraph sync
+        run: uigraph-cli sync
 
   uigraph-release:
     if: startsWith(github.ref, 'refs/tags/')
@@ -115,7 +115,7 @@ jobs:
         env:
           UIGRAPH_TOKEN: ${{ secrets.UIGRAPH_TOKEN }}
           UIGRAPH_GATEWAY_URL: ${{ secrets.UIGRAPH_GATEWAY_URL }}
-        run: uigraph release
+        run: uigraph-cli release
 ```
 
 ## GitLab CI
@@ -127,7 +127,7 @@ uigraph-sync:
   script:
     - go install github.com/uigraph-oss/uigraph-cli
     - export PATH="$PATH:$(go env GOPATH)/bin"
-    - uigraph sync
+    - uigraph-cli sync
   only:
     - main
     - master
@@ -143,7 +143,7 @@ uigraph-sync-dry-run:
   script:
     - go install github.com/uigraph-oss/uigraph-cli
     - export PATH="$PATH:$(go env GOPATH)/bin"
-    - uigraph sync --dry-run
+    - uigraph-cli sync --dry-run
   only:
     - merge_requests
   variables:
@@ -158,7 +158,7 @@ uigraph-release:
   script:
     - go install github.com/uigraph-oss/uigraph-cli
     - export PATH="$PATH:$(go env GOPATH)/bin"
-    - uigraph release
+    - uigraph-cli release
   only:
     - tags
   variables:
@@ -181,7 +181,7 @@ pipelines:
         script:
           - go install github.com/uigraph-oss/uigraph-cli
           - export PATH="$PATH:$(go env GOPATH)/bin"
-          - uigraph sync
+          - uigraph-cli sync
         variables:
           UIGRAPH_TOKEN: $UIGRAPH_TOKEN
           UIGRAPH_GATEWAY_URL: $UIGRAPH_GATEWAY_URL
@@ -195,7 +195,7 @@ pipelines:
           script:
             - go install github.com/uigraph-oss/uigraph-cli
             - export PATH="$PATH:$(go env GOPATH)/bin"
-            - uigraph release
+            - uigraph-cli release
           variables:
             UIGRAPH_TOKEN: $UIGRAPH_TOKEN
             UIGRAPH_GATEWAY_URL: $UIGRAPH_GATEWAY_URL
@@ -209,7 +209,7 @@ pipelines:
 | `UIGRAPH_GATEWAY_URL` | unless `--enterprise` or `--api-url` is passed | Gateway to sync to |
 
 The templates below leave the gateway URL out of the job. Set `UIGRAPH_GATEWAY_URL` as a
-pipeline variable alongside `UIGRAPH_TOKEN`, or add `--enterprise` to each `uigraph`
+pipeline variable alongside `UIGRAPH_TOKEN`, or add `--enterprise` to each `uigraph-cli`
 command on hosted UiGraph.
 
 ## Token Scopes
@@ -223,7 +223,7 @@ config needs before the first real run.
 | `services:write` | Service record, APIs, dependencies, diagrams, databases, queries, test packs, test cases, docs |
 | `maps:write` | Maps, frames, focal points, component links |
 | `billing:write` | `costTags` |
-| `timeline:write` | `timeline` events and `uigraph release` |
+| `timeline:write` | `timeline` events and `uigraph-cli release` |
 | `mlstudio:write` | `ml` projects, models, experiments, runs |
 
 ## Exit Codes
