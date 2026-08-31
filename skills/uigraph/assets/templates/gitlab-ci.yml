@@ -1,5 +1,5 @@
 # Set UIGRAPH_TOKEN and UIGRAPH_GATEWAY_URL as CI/CD variables.
-# On hosted UiGraph, drop UIGRAPH_GATEWAY_URL and add --enterprise to each uigraph-cli command.
+# On hosted UIGraph, drop UIGRAPH_GATEWAY_URL and add --enterprise to each uigraph-cli command.
 
 uigraph-sync:
   stage: deploy

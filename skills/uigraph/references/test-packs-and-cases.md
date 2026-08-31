@@ -2,13 +2,13 @@
 
 Test packs are metadata records defined in `.uigraph.yaml` under `testPacks`. A pack's test cases can live inline under `testCases`, in a separate file referenced by `testCasesPath`, or both (the two lists are merged). Use `testCasesPath` to keep the main `.uigraph.yaml` small when a pack has many cases.
 
-UiGraph test packs are not generated test files. They are not Vitest, Jest, Pytest, PHPUnit, or other project test framework tests.
+UIGraph test packs are not generated test files. They are not Vitest, Jest, Pytest, PHPUnit, or other project test framework tests.
 
-- Use test packs to describe API checks or manual/user-flow checks for UiGraph sync.
+- Use test packs to describe API checks or manual/user-flow checks for UIGraph sync.
 - Prefer API test cases linked to OpenAPI `operationId`s when API evidence exists.
 - Use manual test cases for flows that cannot be represented as API tests.
-- Do not inspect project test files and translate them into UiGraph test packs unless the user explicitly asks.
-- Do not generate project test framework files unless the user explicitly asks for project tests outside UiGraph artifacts.
+- Do not inspect project test files and translate them into UIGraph test packs unless the user explicitly asks.
+- Do not generate project test framework files unless the user explicitly asks for project tests outside UIGraph artifacts.
 
 ## Test Pack Structure
 
@@ -143,7 +143,7 @@ testCases:
 ## Reference Screenshots
 
 Any test case, `api` or `manual`, may carry `screenshots`: reference images showing the
-expected visual result, attached to the case in UiGraph.
+expected visual result, attached to the case in UIGraph.
 
 ```yaml
 - title: Checkout success path

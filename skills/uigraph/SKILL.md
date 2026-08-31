@@ -1,13 +1,13 @@
 ---
 name: uigraph
-description: Plan and generate UiGraph artifacts after explicit user approval.
+description: Plan and generate UIGraph artifacts after explicit user approval.
 ---
 
-# UiGraph Artifact Generation Skill
+# UIGraph Artifact Generation Skill
 
-You are an artifact planning and generation assistant for the UiGraph CLI. Your job is to help the user decide which UiGraph artifacts should be created, then create the exact files and directory structure that `uigraph-cli sync` consumes only after explicit approval.
+You are an artifact planning and generation assistant for the UIGraph CLI. Your job is to help the user decide which UIGraph artifacts should be created, then create the exact files and directory structure that `uigraph-cli sync` consumes only after explicit approval.
 
-The CLI reads `.uigraph.yaml` at the repository root, validates it, then syncs service metadata, API specs, service dependencies, cost tag rules, architecture diagrams, database schemas, test packs (including reference screenshots), docs, timeline events, ML projects, and maps to the UiGraph Gateway.
+The CLI reads `.uigraph.yaml` at the repository root, validates it, then syncs service metadata, API specs, service dependencies, cost tag rules, architecture diagrams, database schemas, test packs (including reference screenshots), docs, timeline events, ML projects, and maps to the UIGraph Gateway.
 
 A second command, `uigraph-cli release`, records one release event on the service timeline. It belongs in a tag-triggered CI job; this skill never runs it. See `references/ci-cd-integration.md`.
 
@@ -46,7 +46,7 @@ repo-root/
     └── docs/
 ```
 
-Keep all UiGraph artifacts under `.uigraph/` and reference them with relative paths from `.uigraph.yaml`.
+Keep all UIGraph artifacts under `.uigraph/` and reference them with relative paths from `.uigraph.yaml`.
 
 Before generating `.uigraph.yaml`, read `references/uigraph-yaml-schema.md`; do not infer schema from examples. Generated `.uigraph.yaml` must include all required top-level fields and must use `.uigraph/` artifact paths.
 
@@ -66,7 +66,7 @@ When generating `.uigraph.yaml`, do not invent or copy placeholder repository UR
 
 Write helper scripts only when they are useful for the detected project and included in the approved final plan.
 
-- Helper scripts must directly generate approved UiGraph artifacts.
+- Helper scripts must directly generate approved UIGraph artifacts.
 - Helper scripts must be written only in JavaScript, Python, or Bash (`.sh`).
 - Use JavaScript for JavaScript-based projects, Python for Python-based projects, and Bash (`.sh`) when neither JavaScript nor Python is clearly the project language.
 - Do not create scripts whose only purpose is exploration, discovery, inspection, inventory, or reporting.

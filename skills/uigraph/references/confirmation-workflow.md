@@ -53,7 +53,7 @@ The approval message must contain this word. "generate", "generate now", and "ok
 
 Generated helper scripts must be written only under `.uigraph/scripts/`.
 
-Scripts must directly generate approved UiGraph artifacts. Do not create scripts whose only purpose is exploration, discovery, inspection, inventory, or reporting.
+Scripts must directly generate approved UIGraph artifacts. Do not create scripts whose only purpose is exploration, discovery, inspection, inventory, or reporting.
 
 - Scripts must be written only in JavaScript, Python, or Bash (`.sh`).
 - Use JavaScript for JavaScript-based projects, Python for Python-based projects, and Bash (`.sh`) when neither JavaScript nor Python is clearly the project language.

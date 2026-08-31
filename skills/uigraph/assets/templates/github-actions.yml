@@ -1,7 +1,7 @@
 # Set UIGRAPH_TOKEN and UIGRAPH_GATEWAY_URL as repository secrets.
-# On hosted UiGraph, drop UIGRAPH_GATEWAY_URL and add --enterprise to each uigraph-cli command.
+# On hosted UIGraph, drop UIGRAPH_GATEWAY_URL and add --enterprise to each uigraph-cli command.
 
-name: UiGraph
+name: UIGraph
 
 on:
   push:
@@ -20,7 +20,7 @@ jobs:
         with:
           go-version: stable
 
-      - name: Install UiGraph CLI
+      - name: Install UIGraph CLI
         run: |
           go install github.com/uigraph-oss/uigraph-cli
           echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
@@ -32,7 +32,7 @@ jobs:
           UIGRAPH_GATEWAY_URL: ${{ secrets.UIGRAPH_GATEWAY_URL }}
         run: uigraph-cli sync --dry-run
 
-      - name: Sync to UiGraph on push
+      - name: Sync to UIGraph on push
         if: github.event_name == 'push'
         env:
           UIGRAPH_TOKEN: ${{ secrets.UIGRAPH_TOKEN }}
@@ -51,12 +51,12 @@ jobs:
         with:
           go-version: stable
 
-      - name: Install UiGraph CLI
+      - name: Install UIGraph CLI
         run: |
           go install github.com/uigraph-oss/uigraph-cli
           echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
 
-      - name: Record release on the UiGraph timeline
+      - name: Record release on the UIGraph timeline
         env:
           UIGRAPH_TOKEN: ${{ secrets.UIGRAPH_TOKEN }}
           UIGRAPH_GATEWAY_URL: ${{ secrets.UIGRAPH_GATEWAY_URL }}

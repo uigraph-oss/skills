@@ -3,7 +3,7 @@
 The CLI requires the `UIGRAPH_TOKEN` environment variable and a gateway URL.
 
 Set the gateway URL with `UIGRAPH_GATEWAY_URL` or `--api-url` when the gateway is
-self-hosted. On hosted UiGraph, pass `--enterprise` instead and the CLI resolves the URL
+self-hosted. On hosted UIGraph, pass `--enterprise` instead and the CLI resolves the URL
 itself, so neither the variable nor the flag is needed. `--enterprise=DEV` targets the dev
 environment. `--api-url` and `--enterprise` cannot be passed together, and a command with
 none of the three exits with code `1`.
@@ -56,7 +56,7 @@ other. See `references/cost-tags-and-timeline.md`.
 ## GitHub Actions
 
 ```yaml
-name: UiGraph Sync
+name: UIGraph Sync
 
 on:
   push:
@@ -75,7 +75,7 @@ jobs:
         with:
           go-version: stable
 
-      - name: Install UiGraph CLI
+      - name: Install UIGraph CLI
         run: |
           go install github.com/uigraph-oss/uigraph-cli
           echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
@@ -87,7 +87,7 @@ jobs:
           UIGRAPH_GATEWAY_URL: ${{ secrets.UIGRAPH_GATEWAY_URL }}
         run: uigraph-cli sync --dry-run
 
-      - name: Sync to UiGraph on push
+      - name: Sync to UIGraph on push
         if: github.event_name == 'push'
         env:
           UIGRAPH_TOKEN: ${{ secrets.UIGRAPH_TOKEN }}
@@ -106,7 +106,7 @@ jobs:
         with:
           go-version: stable
 
-      - name: Install UiGraph CLI
+      - name: Install UIGraph CLI
         run: |
           go install github.com/uigraph-oss/uigraph-cli
           echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
@@ -177,7 +177,7 @@ image: golang:1.23
 pipelines:
   default:
     - step:
-        name: UiGraph Sync
+        name: UIGraph Sync
         script:
           - go install github.com/uigraph-oss/uigraph-cli
           - export PATH="$PATH:$(go env GOPATH)/bin"
@@ -189,7 +189,7 @@ pipelines:
   tags:
     'v*':
       - step:
-          name: UiGraph Release
+          name: UIGraph Release
           clone:
             depth: full
           script:
@@ -210,7 +210,7 @@ pipelines:
 
 The templates below leave the gateway URL out of the job. Set `UIGRAPH_GATEWAY_URL` as a
 pipeline variable alongside `UIGRAPH_TOKEN`, or add `--enterprise` to each `uigraph-cli`
-command on hosted UiGraph.
+command on hosted UIGraph.
 
 ## Token Scopes
 

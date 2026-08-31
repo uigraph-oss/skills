@@ -1,12 +1,12 @@
 # Set UIGRAPH_TOKEN and UIGRAPH_GATEWAY_URL as repository variables.
-# On hosted UiGraph, drop UIGRAPH_GATEWAY_URL and add --enterprise to each uigraph-cli command.
+# On hosted UIGraph, drop UIGRAPH_GATEWAY_URL and add --enterprise to each uigraph-cli command.
 
 image: golang:1.23
 
 pipelines:
   default:
     - step:
-        name: UiGraph Sync
+        name: UIGraph Sync
         script:
           - go install github.com/uigraph-oss/uigraph-cli
           - export PATH="$PATH:$(go env GOPATH)/bin"
@@ -18,7 +18,7 @@ pipelines:
   tags:
     'v*':
       - step:
-          name: UiGraph Release
+          name: UIGraph Release
           clone:
             depth: full
           script:
