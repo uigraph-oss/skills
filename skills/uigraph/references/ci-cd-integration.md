@@ -32,8 +32,9 @@ The CLI reads `.uigraph.yaml` and every artifact path relative to the working di
 the repository root must be mounted and `-w` must point at it. `-e NAME` with no value
 forwards the variable from the host shell; both must already be exported.
 
-Pin a released tag such as `uigraph/uigraph-cli:v1.4.0` when the pipeline needs reproducible
-runs. `latest` moves.
+Tags carry no `v` prefix. Pin an exact release such as `uigraph/uigraph-cli:1.0.8` when the
+pipeline needs reproducible runs; `1` and `1.0` float forward within their range, and
+`latest` moves with every release.
 
 `uigraph-cli release` reads the tag at `HEAD`, so the mounted directory needs its full `.git`
 — clone with the complete history before mounting it.
@@ -82,6 +83,8 @@ If the pipeline runs `uigraph-cli release`, omit `timeline.releases.changelogPat
 other. See `references/cost-tags-and-timeline.md`.
 
 ## GitHub Actions
+
+Copy-pasteable files for all three providers live in `assets/templates/ci-cd/`.
 
 Runners already have Docker, so the image replaces the `setup-go` and `go install` steps
 outright.

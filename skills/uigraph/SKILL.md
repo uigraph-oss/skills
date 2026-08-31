@@ -151,4 +151,5 @@ All copy-pasteable templates live in `assets/templates/`.
 | `sequence-diagram-example.mmd` | Sequence diagram `.mmd` covering participants, boxes, blocks, activations, notes |
 | `sequence-context-example.json` | Sequence diagram context.json keyed by generated node IDs |
 | `diagram-context/*.context.json` | Node-specific context.json examples |
-| `github-actions.yml`, `gitlab-ci.yml`, `bitbucket-pipelines.yml` | CI/CD pipelines, including the tag-triggered `uigraph-cli release` job. `github-actions.yml` runs the CLI from the `uigraph/uigraph-cli` Docker image |
+| `ci-cd/github-actions.yml` | GitHub Actions pipeline, including the tag-triggered `uigraph-cli release` job. Runs the CLI from the `uigraph/uigraph-cli` Docker image |
+| `ci-cd/gitlab-ci.yml`, `ci-cd/bitbucket-pipelines.yml` | GitLab CI and Bitbucket Pipelines, including the tag-triggered `uigraph-cli release` job |
