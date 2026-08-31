@@ -67,6 +67,8 @@ Generated artifact paths must stay under `.uigraph/`:
 - `maps[*].frames[*].imagePath` must be under `.uigraph/maps/` when generated.
 - `testPacks[*].testCases[*].screenshots[*]` must be under `.uigraph/tests/screenshots/` when generated.
 
+No entry in `docs` may be a copy of a pre-existing repository document such as a README, changelog, contributing guide, code of conduct, or license. Remove any such entry and delete the copied file.
+
 ## Repository URL Checks
 
 - `service.repository.url` must come from the current git remote or an explicit user-provided URL.
@@ -83,7 +85,7 @@ Generated artifact paths must stay under `.uigraph/`:
 
 ## Helper Script Checks
 
-- Generated helper scripts must directly produce approved UiGraph artifacts.
+- Generated helper scripts must directly produce approved UIGraph artifacts.
 - Generated helper scripts must be written only in JavaScript, Python, or Bash (`.sh`).
 - Helper script language must match the project type: JavaScript for JavaScript projects, Python for Python projects, and Bash (`.sh`) when neither is clearly detected.
 - Do not generate helper scripts whose only purpose is exploration, discovery, inspection, inventory, or reporting.
@@ -149,9 +151,9 @@ rejected outright when `service.name` is empty: `apis`, `dependencies`,
 ## Test Case Rules
 
 - Test cases may be inline under `testCases`, external via `testPacks[*].testCasesPath`, or both (merged).
-- Do not create project test framework files for UiGraph test packs.
-- Do not derive UiGraph test packs from Vitest, Jest, Pytest, or PHPUnit files unless explicitly requested.
-- UiGraph test cases must use only schema fields, not framework-specific fields like `describe`, `it`, `expect`, `test`, `mock`, or `beforeEach`.
+- Do not create project test framework files for UIGraph test packs.
+- Do not derive UIGraph test packs from Vitest, Jest, Pytest, or PHPUnit files unless explicitly requested.
+- UIGraph test cases must use only schema fields, not framework-specific fields like `describe`, `it`, `expect`, `test`, `mock`, or `beforeEach`.
 - `testCases[*].title` is required.
 - `testCases[*].order` is required.
 - API test cases should link to API operations with matching `apiGroupName` and `operationId` when API evidence exists, but linking is optional — omit both for a case not tied to a synced endpoint (e.g. a custom URL).

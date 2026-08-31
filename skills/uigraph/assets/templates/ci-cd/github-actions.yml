@@ -1,7 +1,7 @@
 # Set UIGRAPH_TOKEN and UIGRAPH_GATEWAY_URL as repository secrets.
-# On hosted UiGraph, drop UIGRAPH_GATEWAY_URL and add --enterprise to each uigraph-cli command.
+# On hosted UIGraph, drop UIGRAPH_GATEWAY_URL and add --enterprise to each uigraph-cli command.
 
-name: UiGraph
+name: UIGraph
 
 on:
   push:
@@ -10,34 +10,35 @@ on:
   pull_request:
     branches: [main, master]
 
+env:
+  UIGRAPH_IMAGE: uigraph/uigraph-cli:latest
+
 jobs:
   uigraph-sync:
     if: "!startsWith(github.ref, 'refs/tags/')"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
-        with:
-          go-version: stable
-
-      - name: Install UiGraph CLI
-        run: |
-          go install github.com/uigraph-oss/uigraph-cli
-          echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
 
       - name: Dry run on PR
         if: github.event_name == 'pull_request'
         env:
           UIGRAPH_TOKEN: ${{ secrets.UIGRAPH_TOKEN }}
           UIGRAPH_GATEWAY_URL: ${{ secrets.UIGRAPH_GATEWAY_URL }}
-        run: uigraph-cli sync --dry-run
+        run: |
+          docker run --rm -v "$PWD:/workspace" -w /workspace \
+            -e UIGRAPH_TOKEN -e UIGRAPH_GATEWAY_URL \
+            "$UIGRAPH_IMAGE" sync --dry-run
 
-      - name: Sync to UiGraph on push
+      - name: Sync to UIGraph on push
         if: github.event_name == 'push'
         env:
           UIGRAPH_TOKEN: ${{ secrets.UIGRAPH_TOKEN }}
           UIGRAPH_GATEWAY_URL: ${{ secrets.UIGRAPH_GATEWAY_URL }}
-        run: uigraph-cli sync
+        run: |
+          docker run --rm -v "$PWD:/workspace" -w /workspace \
+            -e UIGRAPH_TOKEN -e UIGRAPH_GATEWAY_URL \
+            "$UIGRAPH_IMAGE" sync
 
   uigraph-release:
     if: startsWith(github.ref, 'refs/tags/')
@@ -47,17 +48,11 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-go@v5
-        with:
-          go-version: stable
-
-      - name: Install UiGraph CLI
-        run: |
-          go install github.com/uigraph-oss/uigraph-cli
-          echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
-
-      - name: Record release on the UiGraph timeline
+      - name: Record release on the UIGraph timeline
         env:
           UIGRAPH_TOKEN: ${{ secrets.UIGRAPH_TOKEN }}
           UIGRAPH_GATEWAY_URL: ${{ secrets.UIGRAPH_GATEWAY_URL }}
-        run: uigraph-cli release
+        run: |
+          docker run --rm -v "$PWD:/workspace" -w /workspace \
+            -e UIGRAPH_TOKEN -e UIGRAPH_GATEWAY_URL \
+            "$UIGRAPH_IMAGE" release

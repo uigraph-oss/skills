@@ -106,7 +106,7 @@ queries:                        # optional; each references a database by name
 queryFiles:                     # optional; externalize query definitions to keep this file small
   - .uigraph/queries/reporting.yaml  # each file holds its own `queries:` list; merged with inline queries
 
-testPacks:                      # optional; UiGraph metadata only, not Vitest/Jest/Pytest files
+testPacks:                      # optional; UIGraph metadata only, not Vitest/Jest/Pytest files
   - name: API Smoke Pack        # required
     type: smoke                 # required: smoke, regression, manual
     environment: staging        # optional

@@ -64,7 +64,7 @@ maps:
 
 ## Component Linking
 
-Each component entry links a focal point to a UiGraph entity.
+Each component entry links a focal point to a UIGraph entity.
 
 ### Component IDs
 

@@ -47,7 +47,7 @@ A `C4Container` diagram draws the system's own pieces as `Container`, `Container
 
 ## Boundary Relationships
 
-A boundary id is a valid relationship endpoint, and a `Rel` with a boundary id at **both** ends stands for that boundary as a whole. The UiGraph editor draws these when the diagram is zoomed out far enough that a boundary's contents disappear, so they are required, not decorative.
+A boundary id is a valid relationship endpoint, and a `Rel` with a boundary id at **both** ends stands for that boundary as a whole. The UIGraph editor draws these when the diagram is zoomed out far enough that a boundary's contents disappear, so they are required, not decorative.
 
 - Whenever a diagram holds two or more boundaries at the same nesting level, every one of them must be the source or target of at least one boundary relationship. A boundary alone at its level needs none.
 - Write them in addition to the element relationships, never instead of them.
@@ -58,4 +58,4 @@ A boundary id is a valid relationship endpoint, and a `Rel` with a boundary id a
 
 Node IDs are the element aliases, so `Person(user, "User")` is keyed as `user`. Boundary ids are never context keys, and C4 diagrams never declare `groups` — nesting lives in the boundary braces. `name`, `data` and `style` behave exactly as for flowchart nodes.
 
-The most reliable C4 pair comes from the UiGraph diagram editor: draw or adjust the diagram there and use **Export To Mermaid**, which writes the `.mmd` and its context file together.
+The most reliable C4 pair comes from the UIGraph diagram editor: draw or adjust the diagram there and use **Export To Mermaid**, which writes the `.mmd` and its context file together.
