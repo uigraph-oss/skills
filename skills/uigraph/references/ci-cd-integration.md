@@ -10,14 +10,42 @@ none of the three exits with code `1`.
 
 ## Installing the CLI
 
-The CLI is distributed from the `uigraph-oss/uigraph-cli` repository on GitHub. Install it with Go:
+The CLI is distributed from the `uigraph-oss/uigraph-cli` repository on GitHub, both as Go
+source and as the `uigraph/uigraph-cli` Docker image.
+
+### Docker
+
+Prefer this in CI. The image ships the CLI already compiled, so the pipeline skips both the
+Go toolchain setup and the build, and every run uses the same binary.
+
+```bash
+docker pull uigraph/uigraph-cli:latest
+
+docker run --rm \
+  -v "$PWD:/workspace" -w /workspace \
+  -e UIGRAPH_TOKEN \
+  -e UIGRAPH_GATEWAY_URL \
+  uigraph/uigraph-cli:latest sync --dry-run
+```
+
+The CLI reads `.uigraph.yaml` and every artifact path relative to the working directory, so
+the repository root must be mounted and `-w` must point at it. `-e NAME` with no value
+forwards the variable from the host shell; both must already be exported.
+
+Pin a released tag such as `uigraph/uigraph-cli:v1.4.0` when the pipeline needs reproducible
+runs. `latest` moves.
+
+`uigraph-cli release` reads the tag at `HEAD`, so the mounted directory needs its full `.git`
+— clone with the complete history before mounting it.
+
+### Go
 
 ```bash
 go install github.com/uigraph-oss/uigraph-cli
 export PATH="$PATH:$(go env GOPATH)/bin"
 ```
 
-For other installation methods, including the published Docker image, read the installation section of that repository's README before running any command.
+Use this for local runs on a machine that already has Go, or where Docker is unavailable.
 
 ## CLI Commands
 
@@ -55,6 +83,9 @@ other. See `references/cost-tags-and-timeline.md`.
 
 ## GitHub Actions
 
+Runners already have Docker, so the image replaces the `setup-go` and `go install` steps
+outright.
+
 ```yaml
 name: UIGraph Sync
 
@@ -65,34 +96,35 @@ on:
   pull_request:
     branches: [main, master]
 
+env:
+  UIGRAPH_IMAGE: uigraph/uigraph-cli:latest
+
 jobs:
   uigraph-sync:
     if: "!startsWith(github.ref, 'refs/tags/')"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
-        with:
-          go-version: stable
-
-      - name: Install UIGraph CLI
-        run: |
-          go install github.com/uigraph-oss/uigraph-cli
-          echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
 
       - name: Dry run on PR
         if: github.event_name == 'pull_request'
         env:
           UIGRAPH_TOKEN: ${{ secrets.UIGRAPH_TOKEN }}
           UIGRAPH_GATEWAY_URL: ${{ secrets.UIGRAPH_GATEWAY_URL }}
-        run: uigraph-cli sync --dry-run
+        run: |
+          docker run --rm -v "$PWD:/workspace" -w /workspace \
+            -e UIGRAPH_TOKEN -e UIGRAPH_GATEWAY_URL \
+            "$UIGRAPH_IMAGE" sync --dry-run
 
       - name: Sync to UIGraph on push
         if: github.event_name == 'push'
         env:
           UIGRAPH_TOKEN: ${{ secrets.UIGRAPH_TOKEN }}
           UIGRAPH_GATEWAY_URL: ${{ secrets.UIGRAPH_GATEWAY_URL }}
-        run: uigraph-cli sync
+        run: |
+          docker run --rm -v "$PWD:/workspace" -w /workspace \
+            -e UIGRAPH_TOKEN -e UIGRAPH_GATEWAY_URL \
+            "$UIGRAPH_IMAGE" sync
 
   uigraph-release:
     if: startsWith(github.ref, 'refs/tags/')
@@ -102,21 +134,21 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-go@v5
-        with:
-          go-version: stable
-
-      - name: Install UIGraph CLI
-        run: |
-          go install github.com/uigraph-oss/uigraph-cli
-          echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
-
       - name: Record release
         env:
           UIGRAPH_TOKEN: ${{ secrets.UIGRAPH_TOKEN }}
           UIGRAPH_GATEWAY_URL: ${{ secrets.UIGRAPH_GATEWAY_URL }}
-        run: uigraph-cli release
+        run: |
+          docker run --rm -v "$PWD:/workspace" -w /workspace \
+            -e UIGRAPH_TOKEN -e UIGRAPH_GATEWAY_URL \
+            "$UIGRAPH_IMAGE" release
 ```
+
+`fetch-depth: 0` stays on the release job. The mount carries `.git` into the container, and
+`release` fails without the tags.
+
+To stay on the Go toolchain instead, swap each `docker run` back for `uigraph-cli` and add
+the `actions/setup-go@v5` and `go install` steps ahead of it.
 
 ## GitLab CI
 
