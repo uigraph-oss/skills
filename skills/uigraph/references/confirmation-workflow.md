@@ -21,10 +21,12 @@ Suggested categories:
 - Service dependencies: other services or datastores this service depends on.
 - Database artifacts: SQL schemas, NoSQL JSON schemas, or migration-derived schemas.
 - Architecture diagrams: Mermaid diagrams with optional `context.json`.
-- Documentation artifacts: README, markdown, HTML, PDF, or support docs.
+- Documentation artifacts: markdown, HTML, PDF, or support docs written from the code.
 - Test packs: smoke, regression, or manual test cases.
 - Maps: maps, frames, focal points, and component links.
 - Helper scripts: project-specific scripts under `.uigraph/scripts/`.
+
+A README, a changelog, a contributing guide, a code of conduct, a license, or any other pre-existing repository document is never a doc artifact. Never offer one as a choice, and never copy, derive, or reference one as a document under `.uigraph/docs/`. Write documents from what the code proves; those files remain sources you read, never output you generate.
 
 ## Final Plan Format
 

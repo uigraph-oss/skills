@@ -2,6 +2,8 @@
 
 Docs are files attached to a service.
 
+A README, a changelog, a contributing guide, a code of conduct, a license, or any other pre-existing repository document is never a doc artifact. Never copy, derive, or reference one as a document under `.uigraph/docs/`. Write documents from what the code proves; those files remain sources you read, never output you generate.
+
 ## Configuration in .uigraph.yaml
 
 ```yaml

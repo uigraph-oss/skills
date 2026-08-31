@@ -67,6 +67,8 @@ Generated artifact paths must stay under `.uigraph/`:
 - `maps[*].frames[*].imagePath` must be under `.uigraph/maps/` when generated.
 - `testPacks[*].testCases[*].screenshots[*]` must be under `.uigraph/tests/screenshots/` when generated.
 
+No entry in `docs` may be a copy of a pre-existing repository document such as a README, changelog, contributing guide, code of conduct, or license. Remove any such entry and delete the copied file.
+
 ## Repository URL Checks
 
 - `service.repository.url` must come from the current git remote or an explicit user-provided URL.
