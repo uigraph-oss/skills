@@ -1,0 +1,4 @@
+interface:
+  display_name: "UIGraph"
+  short_description: "Generate, sync, and view UIGraph artifacts"
+  default_prompt: "Use $uigraph to create UIGraph artifacts for this project."

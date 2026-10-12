@@ -1,6 +1,6 @@
 # UIGraph Skill
 
-Plan and generate UIGraph artifacts.
+Work with UIGraph from your coding agent: run the local viewer, generate artifacts, sync them, and launch Lens.
 
 ## Install
 
