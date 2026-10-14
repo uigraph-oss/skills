@@ -1,6 +1,6 @@
 ---
 name: uigraph
-description: Plans and generates UIGraph artifacts, syncs them to the local viewer, UIGraph Cloud, or a self-hosted gateway, runs the local UIGraph viewer, and launches Lens reviews. Use for any request about UIGraph, including `.uigraph.yaml` and `.uigraph/` artifacts, the local viewer, syncing, and Lens.
+description: Plans and generates UIGraph artifacts, syncs them to the local viewer, UIGraph Cloud, or a self-hosted gateway, starts, opens, stops, kills, restarts, or checks the local UIGraph viewer, and launches Lens reviews. Use for any request about UIGraph, including `.uigraph.yaml` and `.uigraph/` artifacts, the local viewer, `uigraph` or `npx uigraph` commands, syncing, and Lens.
 ---
 
 ## Task
