@@ -6,7 +6,8 @@ Do not generate both SQL and NoSQL database artifacts by default. Generate only 
 
 - Generate SQL schemas only when evidence shows relational database usage, such as migrations, checked-in SQL files, relational ORM models, or dependencies/configuration for PostgreSQL, MySQL, or SQLite.
 - Generate NoSQL schemas only when evidence shows NoSQL usage, such as DynamoDB tables, MongoDB collections, NoSQL schema/config files, SDK usage, or an explicit user request.
-- If the project evidence is ambiguous, ask which database artifact to create instead of generating both SQL and NoSQL.
+- If the project evidence is ambiguous, ask which database artifact to create instead of generating both SQL and NoSQL. In full generation, ask it with the confirmation questions in `references/confirmation-workflow.md`.
+- Build the current schema. Prefer schema definitions or ORM models that describe the current state; when only migrations exist, apply all of them in order, including later renames and drops.
 
 ## Configuration in .uigraph.yaml
 
