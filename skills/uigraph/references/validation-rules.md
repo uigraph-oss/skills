@@ -2,7 +2,7 @@
 
 These are the rules the LLM/agent must manually verify by inspecting generated files. They also reflect constraints enforced by `config.Validate()` in the CLI.
 
-After generating artifacts, validate the generated structure before finishing. Do this through LLM/agent file inspection and reasoning. If validation fails, fix only files generated during the current execution.
+After generating artifacts, validate the generated structure before finishing. Do this through LLM/agent file inspection and reasoning, in addition to `npx --yes uigraph sync`. If validation fails, fix every generated artifact that fails, including ones from earlier runs, and do not rewrite unrelated user files.
 
 ## Required Top-Level Fields
 
@@ -67,7 +67,7 @@ Generated artifact paths must stay under `.uigraph/`:
 - `maps[*].frames[*].imagePath` must be under `.uigraph/maps/` when generated.
 - `testPacks[*].testCases[*].screenshots[*]` must be under `.uigraph/tests/screenshots/` when generated.
 
-No entry in `docs` may be a copy of a pre-existing repository document such as a README, changelog, contributing guide, code of conduct, or license. Remove any such entry and delete the copied file.
+No entry in `docs` may be a copy of a pre-existing repository document. An existing document the user picked is referenced at its current path; remove any copy of it under `.uigraph/docs/`.
 
 ## Repository URL Checks
 
@@ -115,7 +115,7 @@ No entry in `docs` may be a copy of a pre-existing repository document such as a
 - `edges` keys must follow `<source>-<target>` for Mermaid edges when edge context is used.
 - Edge labels must be four words at most, in every diagram type.
 - Context must avoid fields not supported by the converter schema, especially group `style` and node style `backgroundColor`.
-- Node `data[*].type` must use one of the supported component field type names documented in `references/architecture-diagrams.md`.
+- Node `data[*].type` must use one of the supported component field type names shown in `assets/templates/diagram-context/component-field-types.context.json`.
 - Node `shape` values must use one of the supported shape values documented in `references/architecture-diagrams.md`.
 - GIF `animatedIcon` values should use one of the documented animated icon names unless a direct `src` is provided.
 

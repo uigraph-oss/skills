@@ -19,8 +19,8 @@ Most declared dependencies are `downstream`. Use `upstream` to record an inbound
 
 - The service calls another internal service over HTTP, GraphQL, or gRPC (`direction: downstream`).
 - The service reads from or writes to a database owned by another service (`direction: downstream`).
-- The service integrates with a third-party service (for example a payment provider) that the user wants tracked (`direction: downstream`).
-- Another service consumes this service and the user wants that inbound edge recorded here (`direction: upstream`).
+- The service integrates with a third-party service, for example a payment provider (`direction: downstream`).
+- Another service consumes this service, as the repository shows or the user says (`direction: upstream`).
 
 ## Schema
 

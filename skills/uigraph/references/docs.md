@@ -2,7 +2,9 @@
 
 Docs are files attached to a service.
 
-A README, a changelog, a contributing guide, a code of conduct, a license, or any other pre-existing repository document is never a doc artifact. Never copy, derive, or reference one as a document under `.uigraph/docs/`. Write documents from what the code proves; those files remain sources you read, never output you generate.
+Generated docs live under `.uigraph/docs/`, one or more for each service. Write them from what the code proves: how to run and configure it, its main flows, and its operational behaviour.
+
+Existing repository documents the user picked in `references/confirmation-workflow.md` are added under `docs` at their current path. Never copy, move, or rewrite them, and never copy one into `.uigraph/docs/`.
 
 ## Configuration in .uigraph.yaml
 

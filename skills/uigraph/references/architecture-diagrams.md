@@ -31,9 +31,13 @@ A file whose first diagram keyword starts with `C4` is converted by the C4 pipel
 
 `stateDiagram-v2` keeps the named states and the transitions between them. The `[*]` start and end markers are not nodes and do not appear in `context.json`.
 
-Node IDs in the Mermaid file must match keys in `context.json` when context is provided.
+Node IDs in the Mermaid file must match keys in `context.json` when context is provided. Write node IDs with letters, digits, and underscores only, such as `web_app`. The converter cuts an ID at its first hyphen, so `web-app` and `web-worker` both become `web` and merge into one node without any error.
 
-An edge label is four words at most, never a sentence. Labels are drawn on top of the diagram, so a long one covers the nodes around it.
+An edge label is four words at most, never a sentence. Labels are drawn on top of the diagram, so a long one covers the nodes around it. Label an edge that crosses a system boundary with the protocol or call it carries.
+
+Never write `style`, `classDef`, `class`, `linkStyle`, or colors in the Mermaid file; the app renders on a fixed dark canvas.
+
+Use `subgraph` only for real boundaries such as a deployable unit, a network zone, or a bounded context.
 
 ```mermaid
 flowchart LR
@@ -83,7 +87,7 @@ Incorrect, and the most common mistake:
 
 ## Node Behavior
 
-`type` is optional; a node without one stays a default node. Pick a node or custom type (`shape`, `cloud`, etc.) when it makes sense for the node.
+`type` is optional; a node without one stays a default node. Pick a node or custom type (`shape`, `cloud`, etc.) when it makes sense for the node; a wrong type is worse than none.
 
 - `cloud` sets the node type to `cloud`, forces `150x150`, and resolves an icon from `cloud` plus exact `service` name when possible.
 - `text` uses `value` to create the `Text` component field.

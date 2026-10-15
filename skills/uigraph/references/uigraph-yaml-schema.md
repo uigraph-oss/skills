@@ -36,6 +36,10 @@ Use this file as the source of truth before generating `.uigraph.yaml`. Do not i
 - `testPacks[].testCasesPath` externalizes a pack's cases: the file holds a `testCases:` list, merged with any inline `testCases`.
 - Externalized `queries[].path` (the SQL file) is still resolved relative to the working directory, not the queries file.
 
+## Multiple Services
+
+A repository with several deployable services keeps the main service in `.uigraph.yaml` and gives every other service its own config at `.uigraph/services/<service-name>.yaml`, using the same schema. Paths in every config are relative to the repository root. Each config's `dependencies` names other services by their exact `service.name`.
+
 ## Canonical Structure
 
 ```yaml

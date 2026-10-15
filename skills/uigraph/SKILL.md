@@ -11,3 +11,7 @@ Pick the task from the user's request and read its reference before acting. When
 - **Sync artifacts:** [references/sync.md](references/sync.md).
 - **Start, stop, restart, or check the local viewer:** [references/local-viewer.md](references/local-viewer.md).
 - **Run a Lens review:** [references/lens.md](references/lens.md).
+
+## Questions
+
+Ask the user every question through your agent's question tool, such as `AskUserQuestion` in Claude Code or `request_user_input` in Codex, whenever one is available. There is no exception. Write a question as plain text only when no such tool exists.

@@ -2,7 +2,7 @@
 
 This guide maps common system domains to the UIGraph artifacts you should propose.
 
-Do not generate these artifacts automatically. Use this guide to suggest artifact categories and content during the planning phase, then wait for the user to approve the final plan with `Generate`.
+Do not generate these artifacts automatically. Use this guide to find candidates during planning, then generate only what the user approves in `references/confirmation-workflow.md`.
 
 ## General Methodology
 
