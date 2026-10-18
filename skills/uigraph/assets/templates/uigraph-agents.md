@@ -1,6 +1,6 @@
 # UIGraph artifacts
 
-This repository describes its architecture in UIGraph artifacts: `.uigraph.yaml`, `.uigraph/services/*.yaml`, and the files under `.uigraph/`. The UIGraph viewer and Lens pull request reviews read them, so keep them true to the code.
+This repository describes its architecture in UIGraph artifacts: `.uigraph.yaml`, `.uigraph/services/*.yaml`, and the files under `.uigraph/`. The UIGraph viewer reads them, so keep them true to the code.
 
 ## When to update
 
@@ -23,4 +23,4 @@ Update artifacts only when your change does one of these. For any other change, 
 4. In diagrams, never write `style`, `classDef`, `class`, `linkStyle`, or colors.
 5. Run `npx --yes uigraph sync` and fix every problem it reports.
 
-When you are not sure whether your change affects an artifact, leave the artifact as it is and say so in your summary. Lens flags out-of-date diagrams and docs on each pull request.
+When you are not sure whether your change affects an artifact, leave the artifact as it is and say so in your summary.
