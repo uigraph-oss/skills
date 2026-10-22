@@ -9,7 +9,7 @@ The `uigraph` npm package runs the viewer. Run it as `npx --yes uigraph` from th
 - Stop the viewer with `npx --yes uigraph stop`. Never kill its process yourself.
 - Restart with `npx --yes uigraph stop`, then `npx --yes uigraph`.
 - Check the viewer with `npx --yes uigraph status`. It exits with code 1 when the viewer is not running, which is not an error.
-- Always give the user the URL from the command output, `http://127.0.0.1:7357/` by default, because the browser may not open, for example over SSH, in WSL, or in a container. The viewer listens only on `127.0.0.1`, so on a remote machine the user needs port forwarding, such as `ssh -L 7357:127.0.0.1:7357 <host>`.
+- Always give the user the URL from the command output, `http://127.0.0.1:8447/` by default, because the browser may not open, for example over SSH, in WSL, or in a container. The viewer listens only on `127.0.0.1`, so on a remote machine the user needs port forwarding, such as `ssh -L 8447:127.0.0.1:8447 <host>`.
 - The viewer shows services, APIs, dependencies, architecture diagrams, database schemas, docs, and maps. It does not show test packs. The summary line the command prints counts only some of these.
 - Never run `uigraph start` or `uigraph restart`, because they hold the terminal until the viewer stops.
 - The command output can suggest `uigraph start`, `uigraph restart`, `uigraph init`, or `uigraph generate`. Those hints are for people in a terminal, so follow this file instead.
