@@ -18,7 +18,13 @@ docs:
     path: .uigraph/docs/runbook.pdf
     fileType: pdf
     description: Operational runbook
+  - name: Order worker tour
+    path: .uigraph/videos/order-worker.video.yaml
+    fileType: walkthrough
+    description: Narrated video the app plays
 ```
+
+A doc is a video in Library only when its `fileType` is `walkthrough`; its file is the video's YAML. `video` is an uploaded video file, like an MP4.
 
 ## Doc Fields
 
@@ -26,7 +32,7 @@ docs:
 |-------|------|----------|-------------|
 | `name` | string | yes | Display name. Used for upsert matching |
 | `path` | string | yes | Relative path to file |
-| `fileType` | string | no | `pdf`, `html`, `markdown`, `doc`, `txt`, `image`, `video`, `audio`, `other` |
+| `fileType` | string | no | `pdf`, `html`, `markdown`, `doc`, `txt`, `image`, `video`, `audio`, `walkthrough`, `other` |
 | `description` | string | no | Description |
 
 ## Content Type by Extension
@@ -78,6 +84,7 @@ The CLI resolves content type from `fileType` first, then falls back to the file
 | `image` | resolved from extension (default `image/png`) |
 | `video` | resolved from extension (default `video/mp4`) |
 | `audio` | resolved from extension (default `audio/mpeg`) |
+| `walkthrough` | `application/octet-stream` |
 
 When `fileType` is empty, the extension is used (see "Content Type by Extension" above), defaulting to `application/octet-stream`.
 
