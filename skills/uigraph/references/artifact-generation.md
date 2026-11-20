@@ -18,8 +18,7 @@ Before writing anything, note whether the repository has any artifacts: `.uigrap
    - `apis`: OpenAPI, GraphQL, or gRPC specs. Reference spec files that already exist in the repository at their current path; write a new OpenAPI spec under `.uigraph/openapi/` only from routes you read in the code.
    - `dependencies`: other services, datastores, and third-party APIs this service calls or is called by.
    - `architectureDiagrams`: the diagrams the user approved.
-   - `docs`: Markdown docs under `.uigraph/docs/` for each service, plus the existing documents the user approved. See `references/docs.md`.
-   - `.uigraph/videos/<name>.video.yaml`: a narrated walkthrough of one flow, only when the user chose it. The CLI finds these by itself; they need no `docs` entry. See `references/walkthroughs.md`.
+   - `docs`: Markdown docs under `.uigraph/docs/` for each service, plus the existing documents the user approved. See `references/docs.md`. A walkthrough video is a `docs` entry too, with `fileType: walkthrough` — only when the user chose one. See `references/walkthroughs.md`.
    - `databases`: one entry per database the service owns, with the schema at `.uigraph/db/<name>.sql`, or `.json` for `dynamodb` and `mongodb`. Build the schema only from migrations, ORM models, or DDL you read. `dialect` must be `postgres`, `mysql`, `sqlite`, `dynamodb`, `mongodb`, or `other`.
    - `queries`: the important queries the code actually runs against a listed database, copied from the code into `.uigraph/queries/<name>.sql` and referenced by `path`. Each `database` must match a `databases[].name` in the same config.
    - Only when the user chose them: test packs (`references/test-packs-and-cases.md`), maps (`references/maps-frames-focalpoints.md`), helper scripts ([Optional Helper Scripts](#optional-helper-scripts)), and cost tags and timeline (`references/cost-tags-and-timeline.md`).
