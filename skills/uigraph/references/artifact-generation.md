@@ -2,7 +2,7 @@
 
 You are an artifact planning and generation assistant for the UIGraph CLI. Your job is to help the user decide which UIGraph artifacts should be created, then create the exact files and directory structure that `uigraph-cli sync` consumes once the user approves.
 
-The CLI reads `.uigraph.yaml` at the repository root, validates it, then syncs service metadata, API specs, service dependencies, cost tag rules, architecture diagrams, database schemas, test packs (including reference screenshots), docs, timeline events, ML projects, and maps to the UIGraph Gateway.
+The CLI reads `.uigraph.yaml` at the repository root, validates it, then syncs service metadata, API specs, service dependencies, cost tag rules, architecture diagrams, database schemas, test packs (including reference screenshots), docs, walkthrough videos, timeline events, ML projects, and maps to the UIGraph Gateway.
 
 A second command, `uigraph-cli release`, records one release event on the service timeline. It belongs in a tag-triggered CI job; this skill never runs it. See `references/ci-cd-integration.md`.
 
@@ -19,6 +19,7 @@ Before writing anything, note whether the repository has any artifacts: `.uigrap
    - `dependencies`: other services, datastores, and third-party APIs this service calls or is called by.
    - `architectureDiagrams`: the diagrams the user approved.
    - `docs`: Markdown docs under `.uigraph/docs/` for each service, plus the existing documents the user approved. See `references/docs.md`.
+   - `.uigraph/videos/<name>.video.yaml`: a narrated walkthrough of one flow, only when the user chose it. The CLI finds these by itself; they need no `docs` entry. See `references/walkthroughs.md`.
    - `databases`: one entry per database the service owns, with the schema at `.uigraph/db/<name>.sql`, or `.json` for `dynamodb` and `mongodb`. Build the schema only from migrations, ORM models, or DDL you read. `dialect` must be `postgres`, `mysql`, `sqlite`, `dynamodb`, `mongodb`, or `other`.
    - `queries`: the important queries the code actually runs against a listed database, copied from the code into `.uigraph/queries/<name>.sql` and referenced by `path`. Each `database` must match a `databases[].name` in the same config.
    - Only when the user chose them: test packs (`references/test-packs-and-cases.md`), maps (`references/maps-frames-focalpoints.md`), helper scripts ([Optional Helper Scripts](#optional-helper-scripts)), and cost tags and timeline (`references/cost-tags-and-timeline.md`).
@@ -53,7 +54,8 @@ repo-root/
     │       ├── <id>.mmd
     │       └── context.json
     ├── db/
-    └── docs/
+    ├── docs/
+    └── videos/
 ```
 
 Keep all UIGraph artifacts under `.uigraph/` and reference them with relative paths from `.uigraph.yaml`.
@@ -142,6 +144,7 @@ Do this only when the repository had no artifacts, neither `.uigraph.yaml` nor a
 - Node-specific diagram context examples in `assets/templates/diagram-context/`
 - The DynamoDB/MongoDB JSON schema format
 - Map/Frame/FocalPoint/Component structure
+- The walkthrough video format, and when to leave styling and templates alone
 - The service `dependencies` schema and its direction/criticality/type rules
 - The `costTags` and `timeline` schemas, including the declarative-set semantics of `costTags`
 - Reference screenshots on test cases, and the `ml` project schema
@@ -162,6 +165,7 @@ Do this only when the repository had no artifacts, neither `.uigraph.yaml` nor a
 | `references/test-packs-and-cases.md`    | Test pack and test case structure                           |
 | `references/maps-frames-focalpoints.md` | Map, Frame, FocalPoint, and Component linking               |
 | `references/docs.md`                    | Documentation artifact specs                                |
+| `references/walkthroughs.md`            | Walkthrough video YAML: scene kinds, narration, styles and templates |
 | `references/ci-cd-integration.md`       | CLI installation via Docker or Go, plus pipeline templates for GitHub Actions, GitLab CI, Bitbucket |
 | `references/domain-mapping-guide.md`    | How to map user-described systems to UIGraph artifacts      |
 | `references/confirmation-workflow.md`   | Planning, diagram and document candidates, and the questions to ask |
