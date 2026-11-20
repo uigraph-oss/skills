@@ -38,6 +38,7 @@ uses:                               # the artifacts, by their names in the repo
   api: uigraph-api
   db: uigraph
   map: checkout
+  services: [UIGraph Gateway]       # only for a flow that crosses services; see below
 scenes:                             # required, at least one
   - diagram: { focus: [User, Session handler, Postgres] }
     say: Three parts are involved when someone signs in with a password.
@@ -50,6 +51,32 @@ appears only when `recap:` or `outro:` is given — give one; it is what a viewe
 
 `uses:` names the default artifact for every scene. A scene that needs a different one sets `api:`
 or `db:` on itself.
+
+## A flow that crosses services
+
+Only artifacts from this repo's own service are available by default, because that is the service
+the video is saved under. A flow that crosses a boundary -- a request arriving at the gateway and
+ending in this service's database -- names the other services it needs:
+
+```yaml
+uses:
+  services: [UIGraph Gateway]
+  diagram: request-lifecycle
+```
+
+Use the service's name as the workspace has it (`service.name` in its own `.uigraph.yaml`); a slug
+like `uigraph-gateway` is matched too. This service is always loaded and always comes first, so you
+never list it, and a name two services share -- a `users` table in both -- resolves to this
+service's. Artifact names stay plain: there is no `service/artifact` form.
+
+One thing you cannot check from here: whether those names exist. They are in another repo, so
+`uses.services` is the one place a name you cannot verify is allowed. Name a service you have seen
+in the workspace, and keep the list to the services the flow genuinely passes through.
+
+A diagram is the exception that needs none of this. Diagrams belong to the workspace rather than
+to one service, so a diagram that already spans the gateway and this service renders with all its
+components without `uses.services` at all. Reach for the key when you need the *endpoint* or the
+*table* of another service.
 
 ## Scene kinds
 
@@ -259,6 +286,7 @@ with broken scene references syncs clean and fails when someone plays it, and th
 4. **Scene count.** 6 to 8. Fewer is a thin video; more is two videos.
 5. **Valid YAML**, and `walkthrough:` is lowercase letters, numbers and dashes.
 6. **It is listed** in `.uigraph.yaml` under `docs` with `fileType: walkthrough`.
+7. **Every artifact is from this service**, or the service it belongs to is in `uses.services`.
 
 Then show the user the file and say which artifact each scene names, so they can correct a wrong
 choice before it is rendered.
@@ -327,4 +355,5 @@ is already in the repository.
 | Writing the file but not listing it under `docs:` | The entry with `fileType: walkthrough` is what syncs it. |
 | Explaining the whole system | One flow per video. |
 | Naming an artifact you did not read | Only diagrams, endpoints, tables and frames that exist. |
+| Naming another service's endpoint or table without `uses.services` | List the service, or the scene is a warning card. |
 | Finishing without linting | `video-cli lint`; `uigraph sync` checks nothing here. |
