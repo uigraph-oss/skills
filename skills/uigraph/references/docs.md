@@ -26,6 +26,8 @@ docs:
 
 A doc is a video in Library only when its `fileType` is `walkthrough`; its file is the video's YAML. `video` is an uploaded video file, like an MP4.
 
+A walkthrough needs this `docs:` entry like any other doc. Keep the file at `.uigraph/videos/<name>.video.yaml`. See `references/walkthroughs.md` for the video's own format.
+
 ## Doc Fields
 
 | Field | Type | Required | Description |
