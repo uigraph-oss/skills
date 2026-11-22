@@ -1,13 +1,30 @@
 # Walkthrough Videos
 
-A walkthrough is a narrated video that explains one flow using the repository's own artifacts. A
-scene does not hold a picture; it names a diagram, an endpoint, a table or a screen, and the
-picture is drawn from that artifact every time the video is made. Rename a component and the next
+A walkthrough is a narrated video that explains one flow, mostly with the repository's own
+artifacts. A scene that names a diagram, an endpoint or a table holds no picture: it is drawn from
+that artifact every time the video is made. Rename a component and the next
 render shows the new name.
 
 Write one when the user asks for a video, a walkthrough, a narrated explanation, or a tour of a
-flow. Never offer one for a repository whose flow has no diagram, API spec or schema synced: a
-scene has nothing to name, and the first job is mapping the flow.
+flow. Offer one unasked only for a flow with a diagram. When asked for one where the flow has no
+artifacts, build it from template scenes with what the repository and the user state.
+
+When priorities pull apart, facts and what the user asked come first, then the brand, then the
+design defaults below.
+
+## Ask, then show a plan
+
+1. Read the flow in the repository, and the artifacts a video could show.
+2. Ask only for what the video can't be made well without and you couldn't find, like numbers,
+   screenshots, who it's for when that's unclear, or a brand asset they want. One question at a
+   time, two at most, each with 2 to 4 short choices.
+3. Show the plan and wait for a yes: the title, the brand it will use, and one line per scene
+   saying what it shows and covers.
+4. Write the file, check it, and list it in `.uigraph.yaml`, along with any artifact it shows
+   that isn't listed there yet.
+
+When the user says to go ahead or not to ask, skip steps 2 and 3, choose sensibly and say what you
+assumed. A small change to an existing video needs no plan.
 
 ## Where the file goes
 
@@ -36,17 +53,16 @@ uses:                               # the artifacts, by their names in the repo
   diagram: login-and-sso
   api: uigraph-api
   db: uigraph
-  map: checkout
   services: [UIGraph Gateway]       # only for a flow that crosses services; see below
 scenes:                             # required, at least one
   - diagram: { focus: [User, Session handler, Postgres] }
     say: Three parts are involved when someone signs in with a password.
-recap:                              # up to 6 lines, becomes a closing card
-  - Passwords and SSO both end in the same 30-day session
 ```
 
-An opening card is always generated, from `intro`, else `description`, else `title`. A closing card
-appears only when `recap:` or `outro:` is given — give one; it is what a viewer remembers.
+An opening card is always generated, from `intro`, else `description`, else `title`, so don't
+start with a `title` scene. A closing card is optional: `recap:` (up to 6 short lines) or `outro:`
+(what is said over them) adds one. Use it when the points are worth repeating, and leave both out
+when the last scene already lands the ending.
 
 `uses:` names the default artifact for every scene. A scene that needs a different one sets `api:`
 or `db:` on itself.
@@ -72,10 +88,9 @@ One thing you cannot check from here: whether those names exist. They are in ano
 `uses.services` is the one place a name you cannot verify is allowed. Name a service you have seen
 in the workspace, and keep the list to the services the flow genuinely passes through.
 
-A diagram is the exception that needs none of this. Diagrams belong to the workspace rather than
-to one service, so a diagram that already spans the gateway and this service renders with all its
-components without `uses.services` at all. Reach for the key when you need the *endpoint* or the
-*table* of another service.
+Diagrams follow the same rule: the player has only the diagrams linked to these services. A
+diagram of this service can draw another service's components without `uses.services`, but a
+diagram, endpoint or table that belongs to another service needs it.
 
 ## Scene kinds
 
@@ -86,12 +101,13 @@ components without `uses.services` at all. Reach for the key when you need the *
 | `diagram` | a synced architecture or sequence diagram | a name, or `{ name?, focus?, highlight?, trace?, messages?, draw? }` |
 | `endpoint` | the OpenAPI, GraphQL or proto spec | `POST /api/v1/orders`, `mutation createOrder`, `OrderService/CreateOrder` |
 | `table` | the database schema | the table name, with `highlight: [col, col]` |
-| `frame` | one screen of a map | a frame name, or `{ name, map?, show? }` (up to 8 focal points by name) |
-| `journey` | several screens in order, along the map's links | `{ map?, frames: [A, B, C] }` — 2 to 6 |
-| `changes` | one frame before and after | a frame name, or `{ frame, map?, from?, to? }` |
 | `template` | nothing — a built-in or workspace template | see [Templates](#templates) |
 
-Every scene also takes `say`, and optionally `id`, `title`, `duration`, `transition`, `style`.
+Don't use the map kinds `frame`, `journey` and `changes`: the workspace player doesn't load maps,
+so they play as placeholder cards. Show screens with the `screenshot`, `demo` or `gallery`
+templates and image links the user gave.
+
+Every scene also takes `say`, and optionally `id`, `title`, `transition`, `layout`, `style`.
 
 ### Moving the camera on a diagram
 
@@ -107,7 +123,7 @@ still on screen while the voice talks past it.
 ```
 
 Use several scenes on one diagram, each moving somewhere new, rather than one scene with a long
-`say`. The example below spends five of its seven scenes on a single diagram.
+`say`.
 
 ### Pointing at fields
 
@@ -141,46 +157,66 @@ written documentation work against you.
 is to say more, not to set `duration`.
 
 Aim for **20 to 35 words a scene**. Over 45 is a warning ("a lot for one scene"); split it. A whole
-walkthrough of **6 to 8 scenes** lands around 90 seconds, which is the right length.
+walkthrough of **6 to 8 scenes** lands around 90 seconds, the right length unless the user wants another.
 
 Setting `duration` by hand is almost always wrong: too short and the compiler warns that the voice
 will be cut off, too long and the screen sits silent.
 
-## Styling: do not set one
+## Brand and style
 
-**Write no style at all.** This is the single biggest thing that keeps videos looking good.
+Start from the workspace's default style, which a video gets by setting nothing. When the user
+wants another brand or look, use the first of these that fits:
 
-Every workspace has a default style — a brand kit, or one of the seven built-in looks (`graphite`
-the default, `clean`, `aurora`, `blueprint`, `minimal`, `cinema`, `bright`). A video with no style
-is drawn in it, and every video in the workspace matches. A video that sets its own colours or
-fonts stops matching the moment the brand changes, and an invented palette is how a video ends up
-looking worse than the default.
+1. A saved workspace style, by its ID (`video: { style: <id> }`, or `<id>:<variation>` for one of
+   its variations). The app resolves it; linting ignores it.
+2. A built-in look (`video: { look: blueprint }`): `graphite`, `clean`, `aurora`, `blueprint`,
+   `minimal`, `cinema`, `bright`.
+3. Their brand in this file, from colours, fonts and a logo they gave or the repository has. Don't
+   invent a brand or a logo URL. Add `video: { style: graphite }`, or another built-in look, so
+   nothing of the workspace's own brand carries over.
 
-Styles are made in the app, under **Catalog → Video templates**: start a new style, upload style
-YAML, or build one from a brand guide with AI. They are **not** synced from the repository — the
-CLI pushes no style file, so a brand kit written into `.uigraph/` reaches nothing. If the user
-wants their brand on their videos, point them at the Catalog; that is one setup for the whole
-workspace, not a per-video job.
-
-If the user explicitly asks for a particular look on this one video:
-
-```yaml
-video: { look: blueprint }    # a built-in look. The engine reads this.
-```
-
-Use `video: { style: <id> }` only when the user names a workspace style — the app resolves it, the
-engine on its own ignores it.
-
-A file-level `style:` block (colours, fonts, type sizes) is a last resort for one deliberate effect
-the user asked for. It wins over the workspace brand, so it is the layer that breaks consistency.
-The full cascade, later winning:
+The CLI syncs no style or template file, so a brand that many videos share belongs in
+**Catalog → Video templates** as a style, and a brand for this video belongs in this file. The
+cascade, later winning:
 
 ```
 engine defaults → built-in look → workspace style → variation → this file → template → scene
 ```
 
-**Never set colours, fonts or `duration`.** Per-scene variety is a different thing, and it is
-allowed — see below.
+Brand goes at the top of the file. Don't put colours on single scenes; UIGraph's checker flags
+them. A logo needs its image, as a direct https link or a data URL, and where it shows; `show: all`
+puts it on every scene, the opening card included. It has to read on each background it lands on,
+so leave out `layout: bold` when the logo is the brand colour.
+
+To mix dark and light scenes, give the video one tone and make templates for the other from
+built-in ones with `from:`. Switch tone where the story turns, and set every colour role shown
+here so text stays readable:
+
+```yaml
+brand:
+  name: Acme
+  logo: https://example.com/logo.svg
+style:
+  logo: { show: all, position: top-left, height: 56 }
+  background: { kind: solid }
+  colors:
+    { background: '#101418', surface: '#1b2128', border: '#2c343d', text: '#f7f7f7', muted: '#aab2bd', primary: '#f97316', onPrimary: '#101418' }
+templates:
+  light-flow:                 # use as `template: light-flow`, with flow's fields
+    from: flow
+    style: &light
+      background: { kind: solid }
+      colors:
+        { background: '#ffffff', surface: '#f4f5f7', border: '#dfe3e8', text: '#14181d', muted: '#59636e', primary: '#c2410c', onPrimary: '#ffffff' }
+  light-line:                 # a big line of text: `title` is its field
+    from: title
+    style: *light
+```
+
+`from:` takes built-in templates only, so diagram, endpoint and table scenes and the seven moments
+stay in the video's tone. For a moment in the other tone, use `from: title` for a line or
+`from: delta` for a number that moved. Darken a pale brand colour where it's text on white. The
+colours above only show the syntax.
 
 ## Make it feel designed, not a slide deck
 
@@ -188,23 +224,38 @@ A video of seven identical cards is correct and dull. These are the rules the ap
 writer follows; follow them too, so a walkthrough written in the repo looks like one written in
 Studio.
 
-- **Open with a hook.** A `statement`, a `stat`, an `announce`, or straight into the diagram.
-  Never open on a list.
+- **Open with a hook.** A `statement`, a `stat`, an `announce`, a `quote`, a `pair`, or straight
+  into the diagram. Don't open on a list.
 - **Use a moment where the content has one.** `stat` for a number that matters, `quote` for
   someone's words, `before-after` for a change, `pair` for two options, `announce` for something
   new, `statement` for the one idea to remember. Most videos should have at least one.
 - **Show something in at least a third of the scenes** — a diagram, endpoint, table, code,
   sequence or data scene — whenever the repository has one.
-- **Never use the same template twice in a row.** Walking one diagram across several scenes is
-  fine, and is usually the best thing a walkthrough can do. Use `bullets` at most twice; prefer
+- **Avoid the same template twice in a row.** Walking one diagram across several scenes is
+  fine, as are a how-to's consecutive steps: never drop or merge real content for variety. Use
+  `bullets` at most twice; prefer
   `checklist`, `flow`, `pair` or `step` for lists.
 - **When something passes between parties** — requests, redirects, callbacks, tokens, events — use
   a `sequence` scene rather than `flow`, so it draws them talking.
-- **Only use numbers the repository states**, exactly. Never estimate or fill in a value.
-- **Don't end with a `summary`** that repeats the closing card. Finish on a `statement`, a `stat`,
-  or the diagram.
+- **Show numbers as data**: `dashboard` for several, `chart` over time, `breakdown` for parts of
+  a whole, `funnel` for stages, `goals` against targets, `delta` for one that moved.
+- **Only use facts and numbers the repository or the user states**, exactly. Never estimate, fill
+  in a value or make up a quote.
+- **End deliberately**, on a `statement`, a `stat` or the diagram. With a `recap`, no `summary`
+  scene as well.
 
-Four things vary a scene without touching the brand. These are the only style keys to write:
+By purpose: an explainer says why it matters, walks how it works, shows the pieces that matter and
+ends on what to remember. A how-to gives each step its own scene, in order, with a `callout`
+where there's a real warning. A pitch opens on the problem or the result and shows the product
+doing the work.
+
+A `step` scene acts its step out, and fills what you leave empty with its own claims, like "All
+checks passed" or "Proof attached to the record". So use one only with the true detail its kind
+draws: `collect` a `field` with its value, `decide` its `choices`, `check` its `evidence`, `action`
+its `result` (it also says the viewer runs it), `verify` its `result` (it also says verified). For
+any other step use a `statement`, or a `from: title` line, with `eyebrow: Step 2 of 4`.
+
+These vary a single scene without touching the brand:
 
 | Key | Values | Use it for |
 |---|---|---|
@@ -228,67 +279,84 @@ A layout a template does not have is a warning that lists the ones it does.
 
 ## Templates
 
-**Prefer a scene that names an artifact.** A walkthrough's value is that its pictures are real; a
-template scene is a hand-written card. Use one for the moments an artifact cannot carry — an
-opening statement, a number that matters, a comparison, a closing checklist.
+Where an artifact can carry the scene, show the artifact: its picture is real. Templates carry the
+rest, and the moments that make a video worth watching.
 
-When you do, **use the ones that already exist.** The workspace has them all:
+The seven moments, with their fields (`?` is optional):
 
-- **36 built-in templates**, among them `title`, `bullets`, `callout`, `summary`, `flow`,
-  `sequence`, `code`, `terminal`, `screenshot`, `compare`, `decision`, `chart`, `delta`,
-  `api-change`, `incident`, `trace`, `states`, `access`, `error-budget`.
-- **7 "moments"** for the beats that make a video worth watching: `stat`, `before-after`, `quote`,
-  `announce`, `statement`, `checklist`, `pair`.
-- **6 packs** a workspace can add — new joiners, releases, incidents, training, customer-facing,
-  support.
+| Template | Fields | For |
+|---|---|---|
+| `statement` | `text`, `eyebrow?` | the idea to open on or to remember |
+| `stat` | `label`, `value`, `change?` | a number that matters |
+| `before-after` | `title`, `before: [...]`, `after: [...]` | a change |
+| `quote` | `text`, `by?` | someone's real words |
+| `announce` | `title`, `text?` | something new |
+| `checklist` | `title`, `items: [...]` | things to have or check |
+| `pair` | `title`, `left`, `left_text`, `right`, `right_text` | two options or sides |
 
 ```yaml
-- template: statement
-  text: Every session expires after thirty days.
-  say: One rule covers both paths.
+- template: sequence
+  title: Signing in
+  actors: [Browser, API, Postgres]
+  messages:
+    - { from: Browser, to: API, text: Sends the password, when: browser sends }
+    - { from: API, to: Postgres, text: Looks the user up, when: looks the user }
+  say: The browser sends the password, and the API looks the user up before it trusts anything.
 ```
 
-Do not write a custom template to get a video made. Custom templates are YAML block compositions
-for a scene shape a team repeats across many videos, and they belong in the workspace Catalog so
-every video can use them. Writing one inline in a video file is possible but makes that shape
-available to nothing else. If the user wants a template of their own, say that Catalog → New
-template is where it goes, and that AI can suggest a set from their existing videos.
+A `when:` is a few words from that scene's `say`, so the item lands as they are spoken.
 
-**Order of work, when the user wants videos to look like theirs:** set the style once in the
-Catalog, add a pack if a template fits their kind of video, then write walkthroughs that set
-neither. Not the other way round.
+The other built-ins include `flow`, `step`, `bullets`, `callout`, `code`, `terminal`,
+`screenshot`, `decision`, `chart`, `delta`, `incident`, `trace`, `states`, `access` and
+`error-budget`. With the UIGraph MCP connected, `video_authoring_guide` has each one's fields and
+an example. `request-path`, `service`, `impact` and `api-change` can't be used in a walkthrough:
+their fields clash with scene keys.
+
+A workspace can add six packs of templates: `onboarding`, `releases`, `incidents`, `security`,
+`sales`, `support`.
+
+For a shape none of these has, a template built from blocks must be made in **Catalog → Video
+templates → New template**, or with the MCP's `create_video_template`. Inside a video file only
+`from:` templates work.
 
 ## When an artifact is missing
 
 A scene naming something that does not exist becomes a plain card carrying a warning with the file
-and line, and the rest of the video still plays. The errors say what to write:
+and line, and the rest of the video still plays. Such names are warnings, so linting still exits 0
+with them. The messages say what to fix:
 
-- `"checkout" has no frame called "Nowhere".`
-- `Say which map: add `uses: { map: <name> }` or `map: <name>` here.`
-- `"Cart" has no earlier version to compare with.`
+- `There's no diagram called "checkout". Check .uigraph/diagrams.`
+- `"users" has no column called "ghost".`
 
 Treat every one as a mistake in the file, not an acceptable gap. Only name artifacts you have read
 in `.uigraph.yaml` and under `.uigraph/`.
 
 ## Check it before you finish
 
-Nothing checks a walkthrough for you. `uigraph sync` only requires a `walkthrough:` key, so a file
-with broken scene references syncs clean and fails when someone plays it, and the local viewer
-(`npx uigraph`) does not render videos at all. Check it yourself, by reading:
+`uigraph-cli sync` doesn't check what is in a video, and the local viewer (`npx uigraph`) doesn't
+play videos, so a broken file syncs clean and fails when someone plays it. Run the linter from
+`@uigraph-oss/video-cli` (on GitHub Packages) on it:
+
+```sh
+uigraph-video lint .uigraph/videos/<name>.yaml
+```
+
+It checks the file, and its diagram, endpoint and table names against this repository. It can't
+see other repositories, so names reached through `uses.services` are reported as missing. With the
+UIGraph MCP connected, `validate_video` with the service's ID checks those against what is synced.
+
+When neither can run, tell the user it wasn't checked by a tool, and check by reading:
 
 1. **Every name resolves.** For each scene, find the diagram under `.uigraph/diagrams/`, the
-   endpoint in the API spec `.uigraph.yaml` points at, the table in the schema file, the frame in
-   the map. A name you cannot find is a scene that will play as a warning card.
+   endpoint in the API spec `.uigraph.yaml` points at, and the table in the schema file.
 2. **Node and message names match the diagram exactly.** `focus:` and `trace:` take node labels as
    written in the `.mmd`; `messages:` are message numbers, counted in order from 1.
 3. **Word counts.** 20 to 35 words per `say:`, nothing over 45.
-4. **Scene count.** 6 to 8. Fewer is a thin video; more is two videos.
-5. **Valid YAML**, and `walkthrough:` is lowercase letters, numbers and dashes.
-6. **It is listed** under `videos:` in `.uigraph.yaml`.
-7. **Every artifact is from this service**, or the service it belongs to is in `uses.services`.
+4. **Valid YAML.** Quote any text containing `: `, and `walkthrough:` is lowercase letters,
+   numbers and dashes.
 
-Then show the user the file and say which artifact each scene names, so they can correct a wrong
-choice before it is rendered.
+Either way, the file must be listed under `videos:` in `.uigraph.yaml`. Then show the user the file
+and say what each scene shows, so they can correct a wrong choice before it is rendered.
 
 ## Syncing
 
@@ -302,6 +370,8 @@ it says, so re-syncing an unchanged file re-records nothing.
 
 ## A complete example
 
+Where the repository has these artifacts and states the thirty days:
+
 ```yaml
 walkthrough: login-and-sso
 title: How login and single sign-on work
@@ -312,47 +382,48 @@ uses:
   db: uigraph
 
 scenes:
-  - diagram: { focus: [User, Session handler, Postgres] }
-    say: Three parts are involved when someone signs in with a password. The browser, the session handler in the API, and Postgres.
+  - template: statement
+    layout: bold
+    text: Two ways in, one kind of session.
+    say: "People sign in with a password or through their company's provider, and both roads end at exactly the same kind of session."
 
-  - diagram: { messages: 1-5 }
-    say: The browser posts the email and password. The handler looks the user up, checks they aren't disabled, compares the bcrypt hash, and creates a thirty-day session.
+  - diagram: { focus: [User, Session handler, Postgres] }
+    transition: zoom
+    say: "A password sign-in has three parts. The browser, the session handler in the API, and Postgres, where the account and its session live."
 
   - endpoint: POST /api/v1/auth/login
-    say: That first request is this endpoint. On success it returns the session token, and a wrong password is a four-oh-one.
+    say: "The browser posts the email and password here. The right pair gets a session token back, and a wrong password gets a four-oh-one."
 
   - table: user_sessions
     highlight: [token_hash, expires_at]
-    say: Each session is a row here. Only a hash of the token is stored, and it expires after thirty days.
-
-  - diagram: { messages: 6-13 }
-    say: Single sign-on starts with a redirect. The API saves the login state and a nonce, sends the person to their provider, and checks that state again when they come back.
+    say: "Each session is one row here. Only a hash of the token is stored, so reading this table doesn't let anyone sign in as someone else."
 
   - diagram: { focus: [OIDC or SAML provider] }
-    say: The provider is OIDC or SAML. Either way the API validates the answer itself before trusting any claims.
+    transition: slide
+    say: "Single sign-on adds one more part, the company's provider. The API checks the provider's answer itself before it trusts anything that answer claims."
 
-  - diagram: { messages: 18-23 }
-    say: Then the same rules apply to everyone. The email domain is checked, the user and their membership are created or updated with the mapped role, and a session is issued.
+  - template: stat
+    layout: left
+    label: Every session lasts
+    value: 30 days
+    say: "From there the rules are the same for everyone. Whichever way they came in, the session lasts thirty days and then expires."
 
-recap:
-  - Passwords and SSO both end in the same 30-day session
-  - Only a hash of the session token is stored
-  - Login state and a nonce protect the SSO round trip
+  - template: statement
+    text: The way in changes. The session doesn't.
+    transition: fade
+    say: "So when you're debugging access, start from the session. How someone signed in only matters up to the moment that row was written."
 ```
-
-Seven scenes, 96 seconds, no style, no custom template, every picture drawn from an artifact that
-is already in the repository.
 
 ## Common mistakes
 
 | Mistake | Instead |
 |---|---|
-| Inventing colours, fonts or a brand | Write no style. The workspace default is already right. |
-| Writing a custom template to get started | Use a built-in template, or better, an artifact scene. |
+| Inventing colours, a logo or a brand | The workspace style, or the brand the user or repository gives. |
+| Dropping the brand the user asked for | Set it at the top of this file. |
+| Seven cards of words | Show an artifact, sequence or data scene in at least a third of them. |
 | One diagram scene with a 60-word `say` | Several scenes, each moving the camera somewhere new. |
 | Setting `duration` to pace the video | Write more or fewer words; the voice sets the length. |
 | Writing the file but not listing it under `videos:` | Only listed files sync. Do not add it under `docs:`. |
 | Explaining the whole system | One flow per video. |
-| Naming an artifact you did not read | Only diagrams, endpoints, tables and frames that exist. |
-| Naming another service's endpoint or table without `uses.services` | List the service, or the scene is a warning card. |
-| Finishing without linting | `video-cli lint`; `uigraph sync` checks nothing here. |
+| Naming an artifact you did not read | Only diagrams, endpoints and tables that exist. |
+| Naming another service's artifact without `uses.services` | List the service, or the scene is a warning card. |

@@ -134,7 +134,7 @@ docs:                           # optional
     description: On-call runbook
 
 videos:                         # optional
-  - .uigraph/videos/login.yaml  # path to a video's YAML file (see references/docs.md)
+  - .uigraph/videos/login.yaml  # path to a video's YAML file (see references/walkthroughs.md)
 
 costTags:                       # optional; see references/cost-tags-and-timeline.md
   - key: team                   # required: cloud tag key, matched exactly

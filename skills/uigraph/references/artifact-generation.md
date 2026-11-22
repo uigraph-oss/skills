@@ -144,7 +144,7 @@ Do this only when the repository had no artifacts, neither `.uigraph.yaml` nor a
 - Node-specific diagram context examples in `assets/templates/diagram-context/`
 - The DynamoDB/MongoDB JSON schema format
 - Map/Frame/FocalPoint/Component structure
-- The walkthrough video format, and when to leave styling and templates alone
+- The walkthrough video format, its design rules, and how brand, logo and dark or light scenes are set
 - The service `dependencies` schema and its direction/criticality/type rules
 - The `costTags` and `timeline` schemas, including the declarative-set semantics of `costTags`
 - Reference screenshots on test cases, and the `ml` project schema
@@ -165,7 +165,7 @@ Do this only when the repository had no artifacts, neither `.uigraph.yaml` nor a
 | `references/test-packs-and-cases.md`    | Test pack and test case structure                           |
 | `references/maps-frames-focalpoints.md` | Map, Frame, FocalPoint, and Component linking               |
 | `references/docs.md`                    | Documentation artifact specs                                |
-| `references/walkthroughs.md`            | Walkthrough video YAML: scene kinds, narration, styles and templates |
+| `references/walkthroughs.md`            | Walkthrough videos: planning, design rules, scene kinds, narration, brand and templates |
 | `references/ci-cd-integration.md`       | CLI installation via Docker or Go, plus pipeline templates for GitHub Actions, GitLab CI, Bitbucket |
 | `references/domain-mapping-guide.md`    | How to map user-described systems to UIGraph artifacts      |
 | `references/confirmation-workflow.md`   | Planning, diagram and document candidates, and the questions to ask |
