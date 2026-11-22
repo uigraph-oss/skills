@@ -29,7 +29,7 @@ videos:                          # optional
   - .uigraph/videos/*.video.yaml # paths or globs, relative to .uigraph.yaml
 ```
 
-Leave `videos:` out and the CLI syncs every `.uigraph/videos/*.video.yaml` that has a top-level `walkthrough:` key. Each video is named by its `title:`, and `description:` comes from the file. A file you list yourself must be a video, or the sync stops. Older repos with a `docs:` entry that has `fileType: walkthrough` keep working and are not synced twice.
+Leave `videos:` out and the CLI syncs every `.uigraph/videos/*.video.yaml` that has a top-level `walkthrough:` key. Each video is named by its `title:`, and `description:` comes from the file. A file you list yourself must be a video, or the sync stops.
 
 A walkthrough needs this `docs:` entry like any other doc. Keep the file at `.uigraph/videos/<name>.video.yaml`. See `references/walkthroughs.md` for the video's own format.
 
