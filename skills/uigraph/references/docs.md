@@ -39,7 +39,7 @@ A walkthrough needs this `docs:` entry like any other doc. Keep the file at `.ui
 |-------|------|----------|-------------|
 | `name` | string | yes | Display name. Used for upsert matching |
 | `path` | string | yes | Relative path to file |
-| `fileType` | string | no | `pdf`, `html`, `markdown`, `doc`, `txt`, `image`, `video`, `audio`, `walkthrough`, `other` |
+| `fileType` | string | no | `pdf`, `html`, `markdown`, `doc`, `txt`, `image`, `video`, `audio`, `other` |
 | `description` | string | no | Description |
 
 ## Content Type by Extension
@@ -91,7 +91,6 @@ The CLI resolves content type from `fileType` first, then falls back to the file
 | `image` | resolved from extension (default `image/png`) |
 | `video` | resolved from extension (default `video/mp4`) |
 | `audio` | resolved from extension (default `audio/mpeg`) |
-| `walkthrough` | `application/octet-stream` |
 
 When `fileType` is empty, the extension is used (see "Content Type by Extension" above), defaulting to `application/octet-stream`.
 
