@@ -20,16 +20,7 @@ docs:
     description: Operational runbook
 ```
 
-Videos are not docs. A narrated video is a YAML file the app plays, and it has its own top-level `videos:` section (below). `fileType: video` here means an uploaded video file, such as an MP4.
-
-## Videos
-
-```yaml
-videos:                          # optional
-  - .uigraph/videos/login.yaml   # path to a video's YAML, relative to .uigraph.yaml
-```
-
-List each video file by path, like a diagram or a doc. The file can live anywhere in the repo and have any name; the CLI names the video by its `title:` (or the file name) and takes `description:` from the file. See `references/walkthroughs.md` for the video's own format.
+`fileType: video` is an uploaded video file, like an MP4. A narrated video the app plays is not a doc: it has its own `videos:` section, in `references/walkthroughs.md`.
 
 ## Doc Fields
 
