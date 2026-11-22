@@ -11,17 +11,17 @@ scene has nothing to name, and the first job is mapping the flow.
 
 ## Where the file goes
 
-`.uigraph/videos/<name>.video.yaml`, beside the artifacts it explains. Nothing else is needed:
-`uigraph sync` picks up every file there that has a top-level `walkthrough:` key, and names the
-video by its `title:`. A video kept elsewhere is listed under the top-level `videos:` section:
+Anywhere in the repo; `.uigraph/videos/<name>.yaml`, beside the artifacts it explains, is a good
+default. List its path under the top-level `videos:` section of `.uigraph.yaml`, like a diagram or a
+doc:
 
 ```yaml
 videos:
-  - .uigraph/videos/*.video.yaml
-  - tours/checkout.video.yaml
+  - .uigraph/videos/login-and-sso.yaml
 ```
 
-Videos are not `docs:` entries.
+The CLI names the video by its `title:`. Videos are not `docs:` entries, and a file that is not
+listed reaches nothing.
 
 One video explains one flow. Checkout, sign-in, a deploy. A user who needs the whole system needs
 a map, not a film.
@@ -284,7 +284,7 @@ with broken scene references syncs clean and fails when someone plays it, and th
 3. **Word counts.** 20 to 35 words per `say:`, nothing over 45.
 4. **Scene count.** 6 to 8. Fewer is a thin video; more is two videos.
 5. **Valid YAML**, and `walkthrough:` is lowercase letters, numbers and dashes.
-6. **It is found**: it sits in `.uigraph/videos/`, or `videos:` lists its path.
+6. **It is listed** under `videos:` in `.uigraph.yaml`.
 7. **Every artifact is from this service**, or the service it belongs to is in `uses.services`.
 
 Then show the user the file and say which artifact each scene names, so they can correct a wrong
@@ -351,7 +351,7 @@ is already in the repository.
 | Writing a custom template to get started | Use a built-in template, or better, an artifact scene. |
 | One diagram scene with a 60-word `say` | Several scenes, each moving the camera somewhere new. |
 | Setting `duration` to pace the video | Write more or fewer words; the voice sets the length. |
-| Keeping the file outside `.uigraph/videos/` without listing it | Only that folder and the `videos:` section sync. Do not add it under `docs:`. |
+| Writing the file but not listing it under `videos:` | Only listed files sync. Do not add it under `docs:`. |
 | Explaining the whole system | One flow per video. |
 | Naming an artifact you did not read | Only diagrams, endpoints, tables and frames that exist. |
 | Naming another service's endpoint or table without `uses.services` | List the service, or the scene is a warning card. |

@@ -26,12 +26,10 @@ Videos are not docs. A narrated video is a YAML file the app plays, and it has i
 
 ```yaml
 videos:                          # optional
-  - .uigraph/videos/*.video.yaml # paths or globs, relative to .uigraph.yaml
+  - .uigraph/videos/login.yaml   # path to a video's YAML, relative to .uigraph.yaml
 ```
 
-Leave `videos:` out and the CLI syncs every `.uigraph/videos/*.video.yaml` that has a top-level `walkthrough:` key. Each video is named by its `title:`, and `description:` comes from the file. A file you list yourself must be a video, or the sync stops.
-
-A walkthrough needs this `docs:` entry like any other doc. Keep the file at `.uigraph/videos/<name>.video.yaml`. See `references/walkthroughs.md` for the video's own format.
+List each video file by path, like a diagram or a doc. The file can live anywhere in the repo and have any name; the CLI names the video by its `title:` (or the file name) and takes `description:` from the file. See `references/walkthroughs.md` for the video's own format.
 
 ## Doc Fields
 
