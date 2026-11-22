@@ -29,7 +29,7 @@ After generating artifacts, validate the generated structure before finishing. D
 | `testCases[*].type` | `api`, `manual` |
 | `testCases[*].priority` | `p0`, `p1`, `p2`, `p3` |
 | `databases[*].dialect` | `postgres`, `mysql`, `sqlite`, `dynamodb`, `mongodb`, `other` |
-| `docs[*].fileType` | `pdf`, `html`, `markdown`, `doc`, `txt`, `image`, `video`, `audio`, `other` (`walkthrough` is accepted for older configs; use `videos:`) |
+| `docs[*].fileType` | `pdf`, `html`, `markdown`, `doc`, `txt`, `image`, `video`, `audio`, `other` |
 | `videos[*]` | a path or glob that matches at least one file; every match has a top-level `walkthrough:` key |
 | `maps[*].frames[*].focalPoints[*].visibility` | `public`, `private` |
 | `maps[*].frames[*].focalPoints[*].components[*].componentId` | `component_api-contract`, `component_test-case-suite`, `component_support-kb-troubleshooting`, `component_backend-flow-diagram` |
