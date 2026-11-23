@@ -372,9 +372,12 @@ The CLI checks the file and the artifact names it can load from the repository. 
 references reached through `uses.services` against the other synced services.
 
 With the UIGraph MCP connected, pass the walkthrough YAML to `validate_video` before saving.
-On the updated stack this checks the selected style and templates as well as YAML and scene
-fields. Check synced diagrams, endpoints and tables separately. For videos created via MCP,
-attach the video to its owning service with `create_video` and its `service_id` argument.
+When the tool schema exposes `service_id` and `doc_id`, give the owning service ID for a new
+video or the video document ID for an existing one. This lets the workspace-aware validator
+check synced diagrams, endpoints and tables. With the earlier validator, check synced artifact
+names separately. Attach a new video to its owning service using `create_video` with
+`service_id`.
+
 Verify the opening, a dense scene and the ending on the UIGraph watch page. Confirm that the
 logo reads clearly, the visuals direct attention to the right detail, and the narration
 lands with that detail.
