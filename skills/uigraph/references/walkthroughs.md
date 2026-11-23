@@ -23,8 +23,8 @@ design defaults below.
 4. Write the file, check it, and list it in `.uigraph.yaml`, along with any artifact it shows
    that isn't listed there yet.
 
-When the user says to go ahead or not to ask, skip steps 2 and 3, choose sensibly and say what you
-assumed. A small change to an existing video needs no plan.
+When the user has already authorized creation and supplied enough detail, proceed with the
+brief and state any assumptions. A small change to an existing video needs no separate plan.
 
 ## Where the file goes
 
@@ -167,13 +167,21 @@ will be cut off, too long and the screen sits silent.
 Start from the workspace's default style, which a video gets by setting nothing. When the user
 wants another brand or look, use the first of these that fits:
 
-1. A saved workspace style, by its ID (`video: { style: <id> }`, or `<id>:<variation>` for one of
-   its variations). The app resolves it; linting ignores it.
-2. A built-in look (`video: { look: blueprint }`): `graphite`, `clean`, `aurora`, `blueprint`,
-   `minimal`, `cinema`, `bright`.
-3. Their brand in this file, from colours, fonts and a logo they gave or the repository has. Don't
-   invent a brand or a logo URL. Add `video: { style: graphite }`, or another built-in look, so
-   nothing of the workspace's own brand carries over.
+1. A saved workspace style, by its ID (`video: { style: <id> }`, or `<id>:<variation>`).
+   Resolve the ID with `list_video_styles` or the Catalog.
+2. A built-in look in Studio or Cloud (`video: { style: blueprint }`). Built-in choices are
+   `graphite`, `clean`, `aurora`, `blueprint`, `minimal`, `cinema` and `bright`.
+3. A one-off brand in the video file, using the supplied colours, fonts and logo. Select a built-in
+   style with `video.style` as the base so the workspace's default kit stays out of this video.
+
+For standalone rendering, select a built-in look with `video.look` or apply a local brand
+file with `uigraph-video lint --workspace <brand.yaml> <video.yaml>` when linting. The app
+and updated MCP validator resolve workspace references under `video.style`.
+
+For a reusable kit, use the approved logo and opening image. In the updated Studio, upload
+the logo or choose **Use workspace logo** when it is appropriate. Add approved cover art
+under **Title card image** and choose **Beside text** for a separate headline surface. If
+there is no approved logo, leave the logo position clear.
 
 The CLI syncs no style or template file, so a brand that many videos share belongs in
 **Catalog → Video templates** as a style, and a brand for this video belongs in this file. The
@@ -218,7 +226,21 @@ stay in the video's tone. For a moment in the other tone, use `from: title` for 
 `from: delta` for a number that moved. Darken a pale brand colour where it's text on white. The
 colours above only show the syntax.
 
-## Make it feel designed, not a slide deck
+## Direct the video for its audience
+
+Choose the audience, what they should know or do afterward, and the evidence that proves it.
+Give each scene one focal point. For a series, start from an approved example, carry over its
+style and pacing, and verify each fact against the new source.
+
+- **Executive:** show the evidence for the decision, then name the decision and owner.
+- **Brand lead:** review the logo and opening, plus one dense scene for legibility and contrast.
+- **Launch marketer:** show the buyer-visible change with `compare` and two actual screenshots.
+- **Educator or support lead:** show the controls and the success state with `screenshot` or
+  an explicit `template: journey` using supplied images.
+- **Engineer or technical writer:** follow the handoff with a synced diagram, an `endpoint`,
+  a `sequence`, or a `record` connected to the relevant schema.
+
+## Scene rhythm
 
 A video of seven identical cards is correct and dull. These are the rules the app's own video
 writer follows; follow them too, so a walkthrough written in the repo looks like one written in
@@ -309,8 +331,13 @@ A `when:` is a few words from that scene's `say`, so the item lands as they are 
 The other built-ins include `flow`, `step`, `bullets`, `callout`, `code`, `terminal`,
 `screenshot`, `decision`, `chart`, `delta`, `incident`, `trace`, `states`, `access` and
 `error-budget`. With the UIGraph MCP connected, `video_authoring_guide` has each one's fields and
-an example. `request-path`, `service`, `impact` and `api-change` can't be used in a walkthrough:
-their fields clash with scene keys.
+an example. The updated renderer supports `request-path`, `service`, `impact`, and `api-change`
+as explicit `template:` scenes in walkthroughs. If an older renderer rejects the scene
+because fields collide with artifact shorthand, use a supported scene such as `diagram` or
+`sequence`.
+
+With the updated MCP connected, call `list_video_templates` with the selected `style_ref` to
+discover custom scene IDs, required fields, and layouts from the workspace and kit.
 
 A workspace can add six packs of templates: `onboarding`, `releases`, `incidents`, `security`,
 `sales`, `support`.
@@ -341,11 +368,18 @@ play videos, so a broken file syncs clean and fails when someone plays it. Run t
 uigraph-video lint .uigraph/videos/<name>.yaml
 ```
 
-It checks the file, and its diagram, endpoint and table names against this repository. It can't
-see other repositories, so names reached through `uses.services` are reported as missing. With the
-UIGraph MCP connected, `validate_video` with the service's ID checks those against what is synced.
+The CLI checks the file and the artifact names it can load from the repository. Verify
+references reached through `uses.services` against the other synced services.
 
-When neither can run, tell the user it wasn't checked by a tool, and check by reading:
+With the UIGraph MCP connected, pass the walkthrough YAML to `validate_video` before saving.
+On the updated stack this checks the selected style and templates as well as YAML and scene
+fields. Check synced diagrams, endpoints and tables separately. For videos created via MCP,
+attach the video to its owning service with `create_video` and its `service_id` argument.
+Verify the opening, a dense scene and the ending on the UIGraph watch page. Confirm that the
+logo reads clearly, the visuals direct attention to the right detail, and the narration
+lands with that detail.
+
+Check these details even when a tool passes:
 
 1. **Every name resolves.** For each scene, find the diagram under `.uigraph/diagrams/`, the
    endpoint in the API spec `.uigraph.yaml` points at, and the table in the schema file.
