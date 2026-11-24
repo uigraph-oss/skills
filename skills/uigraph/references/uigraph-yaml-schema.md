@@ -130,8 +130,11 @@ testPacks:                      # optional; UIGraph metadata only, not Vitest/Je
 docs:                           # optional
   - name: Runbook               # required
     path: .uigraph/docs/runbook.md  # required
-    fileType: markdown          # optional: pdf, html, markdown, doc, txt, image, video, audio, walkthrough, other
+    fileType: markdown          # optional: pdf, html, markdown, doc, txt, image, video, audio, other
     description: On-call runbook
+
+videos:                         # optional
+  - .uigraph/videos/login.yaml  # path to a video's YAML file (see references/walkthroughs.md)
 
 costTags:                       # optional; see references/cost-tags-and-timeline.md
   - key: team                   # required: cloud tag key, matched exactly

@@ -29,7 +29,8 @@ After generating artifacts, validate the generated structure before finishing. D
 | `testCases[*].type` | `api`, `manual` |
 | `testCases[*].priority` | `p0`, `p1`, `p2`, `p3` |
 | `databases[*].dialect` | `postgres`, `mysql`, `sqlite`, `dynamodb`, `mongodb`, `other` |
-| `docs[*].fileType` | `pdf`, `html`, `markdown`, `doc`, `txt`, `image`, `video`, `audio`, `walkthrough`, `other` |
+| `docs[*].fileType` | `pdf`, `html`, `markdown`, `doc`, `txt`, `image`, `video`, `audio`, `other` |
+| `videos[*]` | path to an existing video YAML file |
 | `maps[*].frames[*].focalPoints[*].visibility` | `public`, `private` |
 | `maps[*].frames[*].focalPoints[*].components[*].componentId` | `component_api-contract`, `component_test-case-suite`, `component_support-kb-troubleshooting`, `component_backend-flow-diagram` |
 | `testCases[*].screenshots[*]` extension | `.png`, `.jpg`, `.jpeg`, `.gif`, `.webp`, `.svg` |

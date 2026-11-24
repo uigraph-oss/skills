@@ -70,7 +70,8 @@ The user can add the repository's own Markdown and HTML documents to the viewer 
 ## Other Categories
 
 - **Default set:** the `service` block, APIs, dependencies, docs, databases, and queries. Each is generated when the repository has evidence for it.
-- **Offered:** test packs, maps, and helper scripts. Each is generated only when the user chooses it.
+- **Offered:** test packs, maps, walkthrough videos, and helper scripts. Each is generated only when the user chooses it.
+  Offer a walkthrough video only for a flow that has a diagram, and name that flow in the option.
 - **Offered only with evidence:** cost tags and timeline. See `references/cost-tags-and-timeline.md`.
 
 ## Repository URL and Owning Team
@@ -89,7 +90,7 @@ Then ask these questions through the question tool, as `SKILL.md` requires:
 1. **Diagrams.** The user ticks the diagrams to create.
 2. **Existing documents.** The user ticks the documents to add. Skip this question when there are no document candidates.
 3. **Services,** when there are several: whether the split and the main service are right.
-4. **Other categories.** Offer test packs, maps, and helper scripts, and offer cost tags and timeline only when their evidence exists, as `references/cost-tags-and-timeline.md` defines it.
+4. **Other categories.** Offer test packs, maps, walkthrough videos, and helper scripts, and offer cost tags and timeline only when their evidence exists, as `references/cost-tags-and-timeline.md` defines it. Offer a walkthrough video only when a diagram candidate was recommended, and name that flow in the option.
 5. **Repository URL, owning team, and database type,** only the ones you could not find or decide. See `references/database-schemas.md` for the database type.
 6. **Focus.** Ask whether there is anything in particular to focus on. The answer is optional.
 
