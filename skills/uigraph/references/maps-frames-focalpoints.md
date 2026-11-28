@@ -57,10 +57,27 @@ maps:
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | `name` | string | yes | Display name |
-| `x` | float | yes | X coordinate |
-| `y` | float | yes | Y coordinate |
+| `x` | float | yes | X position, on the 3000-unit scale below |
+| `y` | float | yes | Y position, on the same scale |
 | `visibility` | string | no | `public` or `private`. Default: `public` |
 | `components` | list | no | Linked components |
+
+### Coordinates are not pixels
+
+The frame canvas places a focal point at `value / 3000 × the image's rendered width`, for `x` and
+for `y` alike: both axes are measured against the image's **width**. A point at pixel `(px, py)`
+on an image `W` pixels wide is written as:
+
+```
+x = px × 3000 / W
+y = py × 3000 / W
+```
+
+On an 800-pixel-wide screenshot, the pixel `(330, 215)` is `x: 1238, y: 806`. Writing pixels
+straight in puts every point at a fraction of its place, bunched in the top-left corner.
+
+Pick each point by reading the screenshot itself, and after the sync open one frame in the app
+to check that the dots sit on what they name.
 
 ## Component Linking
 
@@ -91,6 +108,22 @@ components:
 ```
 
 This links the focal point to the `registerUser` operation inside the `auth-api` API group belonging to `Auth Service`.
+
+`operationId` must match the operation ID UIGraph stored for the endpoint, which depends on the
+spec:
+
+| Spec | Stored operation ID |
+|---|---|
+| OpenAPI with `operationId` | that `operationId` |
+| OpenAPI or Swagger 2.0 without one | `METHOD /path` as the spec writes the path, such as `POST /auth/login` (no base path) |
+| GraphQL | the root field name, such as `services` or `createDoc` |
+
+A link that does not resolve is dropped without an error. With the UIGraph MCP connected, confirm
+each one first: `list_api_groups` for the group name, then `list_endpoints` and `get_endpoint`,
+whose **OperationID** is the value to copy.
+
+To link a screen to the calls behind it, read them from the frontend code for that screen, such
+as its GraphQL documents and REST clients, rather than guessing from the screen.
 
 ### Example: Test Suite Link
 
@@ -127,3 +160,13 @@ When a frame has `imagePath`:
 3. Gateway responds with action: `skip`, `upload`, or `done`.
 4. If `upload`, CLI uploads to S3 presigned URL, then calls `complete`.
 5. If `skip`, the image is unchanged and no upload occurs.
+
+The stored image becomes a workspace asset with the ID `frame_<frameId>`. A walkthrough video can
+show it as `image: asset:frame_<frameId>`; see `references/walkthroughs.md`.
+
+## Renaming, splitting, and removing maps
+
+Sync creates or updates maps and frames by name and never deletes one. Renaming a map, or
+splitting one map into several, leaves the old map in UIGraph beside the new ones. Remove it in
+the app, from the map's menu on the Maps page, after the new maps have synced. Deleting a map
+deletes its frames and focal points and cannot be undone, so confirm with the user first.
