@@ -105,7 +105,24 @@ diagram, endpoint or table that belongs to another service needs it.
 
 Don't use the map kinds `frame`, `journey` and `changes`: the workspace player doesn't load maps,
 so they play as placeholder cards. Show screens with the `screenshot`, `demo` or `gallery`
-templates and image links the user gave.
+templates.
+
+### Where screenshots come from
+
+An `image` is an https link, a base64 `data:` URL, or `asset:<id>`: an image already uploaded to
+the workspace, which the API serves to the player and the render worker. Prefer `asset:`. A link
+the user gave works too, and `data:` URLs make the file large.
+
+The repository's own screenshots become assets by syncing them as map frames: every frame image is
+stored as the asset `frame_<frameId>`. So, to show the app's screens in a video:
+
+1. Add the screenshots as frames of a map in `.uigraph.yaml` (see
+   `references/maps-frames-focalpoints.md`) and sync them.
+2. Get each frame's ID with the MCP's `list_maps` and `get_map`.
+3. Reference it in the scene as `image: asset:frame_<frameId>`.
+
+`steps` boxes on a `screenshot` scene (`zoom`, `highlight`, `marker`) are fractions of the image,
+from 0 to 1, as `[x, y, width, height]`.
 
 Every scene also takes `say`, and optionally `id`, `title`, `transition`, `layout`, `style`.
 
@@ -404,6 +421,15 @@ uigraph-cli sync --api-url <url>   # self-hosted
 
 The video appears in Library, where it is narrated and rendered. Narration audio is cached by what
 it says, so re-syncing an unchanged file re-records nothing.
+
+**The title is the sync key.** Sync finds the video by its `title:`, so changing the title in the
+file adds a second video and leaves the old one. To rename one, rename it in UIGraph first, with
+the MCP's `update_video` (`title` and the new YAML), then sync the file with the same title. The
+same order applies to a video made through the MCP and later moved into the repository: create it,
+then commit the file with the identical title.
+
+The one-line description on the Library card is set when the video is first created. Neither a
+sync nor `update_video` changes it; edit it in Studio.
 
 ## A complete example
 
